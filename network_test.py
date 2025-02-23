@@ -78,6 +78,7 @@ import cv2
 test_image_path = "C:/Users/vit/myenv/code/dataset/check/check_1.jpg"
 img = cv2.imread(test_image_path)
 
+# VERY IMPOTRTANT else the model will not understand provided image!!!
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 img = cv2.resize(img, (64, 64))
