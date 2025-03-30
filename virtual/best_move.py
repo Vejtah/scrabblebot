@@ -1,10 +1,14 @@
+
 import pygame
 from tqdm import tqdm as tq
 from alg import Scrabble
 import time
 import random
+
+
 pygame.init()
 s = Scrabble()
+
 # Set up display
 window_size = 1200
 rows, cols = 10, 15
@@ -14,6 +18,7 @@ GREY = (225, 225, 225)
 D1_GREY = (190, 190, 190)
 DARK_GREY = (80, 80, 80)
 BLACK = (0, 0, 0)
+YELLOW = (255, 255, 0)
 
 text_size = 55
 
@@ -33,6 +38,8 @@ t_with = window_size / cols
 c_x, c_y = 0, 0
 mid_pos = {}
 letters = {}
+
+played_moves = []
 
 # populate letters with None bacauce of the look up from find move
 
@@ -84,6 +91,15 @@ def draw_back() -> None:
         c_y += t_height
         c_x = 0
 
+    if False:  # def remove impossible
+        possiles = {(8, 9): None, (9, 9): None, (10, 9): None, (11, 9): None, (12, 9): None, (13, 9): None, (14, 9): 'E', (14, 3): None, (14, 4): None, (14, 5): None, (14, 6): None, (14, 7): None, (14, 8): None}
+        for (x, y), item in possiles.items():
+
+            c_x = x * t_with
+            c_y = y * t_height
+            pygame.draw.rect(
+                screen, YELLOW, (c_x, c_y, t_with - 1, t_height - 1)
+            )
 def back_num():
 
     for y in range(rows):
@@ -109,7 +125,7 @@ def move(key: str):
     action = MOVE.index(key)  # modfy the selected tile based on the pressed arrow
     if action == 0:
         selected = (selected[0], selected[1] - 1)
-        direction = (0, -1)
+        direction = (0, 1)
     elif action == 1:
         selected = (selected[0], selected[1] + 1)
         direction = (0, 1)
@@ -118,7 +134,7 @@ def move(key: str):
         direction = (1, 0)
     else:
         selected = (selected[0] - 1, selected[1])
-        direction = (-1, 0)
+        direction = (1, 0)
 
     if 0 <= selected[0] <= cols - 1 and 0 <= selected[1] <= rows -1: # check if selected is on the board
         pass
@@ -149,27 +165,35 @@ def write_existing() -> None:
 def remove(pos) -> None:
     letters[pos] = None
 
-def plot_word(move_dict: dict[str: tuple[int, int]]) -> None:
-    for letter, (x, y) in move_dict.items():
+def plot_word(move_tupple: tuple) -> None:
+    
+    letters_dict = move_tupple[3]
+    
+    for (x, y), letter in letters_dict.items():
         letters[(x, y)] = letter.upper() # add the letter to the main dict 
 
 def choose_rand_letters(l=7):
-    choose = []
-    for letter in range(l):
-        choose.append(random.choice(possible).lower())
-    return ["a", "b", "c", "d", "e", "n", "t"]
+    
+    # Scrabble letter frequencies for English (without blanks)
+    weights = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1]
+    return random.choices(possible, weights=weights, k=l)
 
 
 def find_move():
-    global letters
+    global letters, played_moves
     print("best word...")
     choose = choose_rand_letters()
     print(choose)
-    word_tuple, move_dict = s.eval_words(s.all_pos(letters, choose), letters)
+    best_move, _ = s.eval_moves(s.all_possible_moves(letters, choose, played_moves))
 
-    print(f"best word: {word_tuple[0]}")
+    print(f"best word: {best_move[0]}")
 
-    plot_word(move_dict)
+    plot_word(best_move)
+    
+
+    played_moves.append(best_move[0])  # save word so wont get played again
+    print(f"played moves: {played_moves}")
+
 
 
 clock = pygame.time.Clock()
@@ -183,7 +207,6 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
-            print(key)
             if key in MOVE:  # move selected tile
                 move(key)
             elif key.upper() in possible:
@@ -203,6 +226,6 @@ while running:
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(60)
+    clock.tick(10)
 
 exit()
