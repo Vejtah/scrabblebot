@@ -1,211 +1,172 @@
-import enchant
 import itertools
 from tqdm import tqdm
 import time
-d = enchant.Dict("en_US")  # select language
 
+# Set up the dictionary for word validation.
 
-def all_pos_local(letters: list[str], num_slots: int) -> list:
-    # itertools.product returns an iterator over tuples
-    return ["".join(combo) for combo in itertools.permutations(letters, num_slots)]
+from dictonray import Us_en
 
+d = Us_en()
 
-def check_word(word: str) -> list:
-    if len(word) >= 2 and d.check(word):
-        return True
-    else: 
-        return False
+def check_word(word: str) -> bool:
+    """Return True if word has length>=2 and is in the dictionary."""
+    return len(word) >= 2 and d.check(word)
 
 def score_word(word: str) -> int:
-    
-    score = {
-        'A': 1,
-        'B': 3,
-        'C': 3,
-        'D': 2,
-        'E': 1,
-        'F': 4,
-        'G': 2,
-        'H': 4,
-        'I': 1,
-        'J': 8,
-        'K': 5,
-        'L': 1,
-        'M': 3,
-        'N': 1,
-        'O': 1,
-        'P': 3,
-        'Q': 10,
-        'R': 1,
-        'S': 1,
-        'T': 1,
-        'U': 1,
-        'V': 4,
-        'W': 4,
-        'X': 8,
-        'Y': 4,
-        'Z': 10
+    """Compute a simple Scrabble score for a word (no bonus squares)."""
+    scores = {
+        'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4,
+        'G': 2, 'H': 4, 'I': 1, 'J': 8, 'K': 5, 'L': 1,
+        'M': 3, 'N': 1, 'O': 1, 'P': 3, 'Q': 10, 'R': 1,
+        'S': 1, 'T': 1, 'U': 1, 'V': 4, 'W': 4, 'X': 8,
+        'Y': 4, 'Z': 10
     }
-    total_s = 0
-    for letter in list(word):
-        total_s += score[letter.upper()]
+    actual_score = sum(scores[letter.upper()] for letter in word)
+    lenth_score = len(word) + 2 # make lengh a facor as well 
+    return actual_score * lenth_score
 
-    return total_s 
+def remove_impossible(board: dict) -> dict:
+    """
+    Filter board positions to only those adjacent to an existing letter.
+    This reduces the search space by focusing on "active" areas.
+    """
+    rows, cols = 10, 15
+    filtered = {}
+    for y in range(rows):
+        for x in range(cols):
+            # Check the 3x3 neighborhood.
+            adjacent = False
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < cols and 0 <= ny < rows:
+                        if board.get((nx, ny)) is not None:
+                            adjacent = True
+            if adjacent:
+                filtered[(x, y)] = board.get((x, y))
+    return filtered
 
-
-def insert_substring(original: str, index: int, substring: str) -> str:
-    return original[:index] + substring + original[index:]
-
+def generate_words_from_sequence(board: dict, start: tuple, direction: tuple, length: int, hand: list[str]) -> list:
+    """
+    For a given starting coordinate and direction, generate all valid words of
+    given length by filling empty board slots with letters from hand.
+    
+    Parameters:
+      board: dict mapping (x,y) to a letter (or None if empty)
+      start: starting (x, y) coordinate
+      direction: tuple (dx, dy) indicating the direction (e.g. (1,0) for horizontal)
+      length: how many slots to include in this sequence
+      hand: list of letters available
+      
+    Returns:
+      A list of moves. Each move is a tuple:
+        (word, direction, start, placed_positions)
+      where placed_positions is a dict mapping board coordinates to the letter played.
+    """
+    seq = []         # will store letters or None
+    empty_indices = []  # indices in the sequence that are empty (to fill from hand)
+    fixed_indices = {}  # indices where board already has a letter
+    # Build the sequence along the direction.
+    for i in range(length):
+        pos = (start[0] + i * direction[0], start[1] + i * direction[1])
+        # Check board boundaries (cols: 0-14, rows: 0-9)
+        if not (0 <= pos[0] < 15 and 0 <= pos[1] < 10):
+            break
+        letter = board.get(pos, None)
+        if letter is not None:
+            seq.append(letter.lower())
+            fixed_indices[i] = letter.lower()
+        else:
+            seq.append(None)
+            empty_indices.append(i)
+    # Only consider sequences that include at least one board letter (an anchor)
+    if not fixed_indices:
+        return []
+    # If no empty slots, the word is fixed. Validate it.
+    if not empty_indices:
+        word = "".join(seq)
+        if check_word(word):
+            return [(word, direction, start, {})]
+        return []
+    
+    valid_moves = []
+    # For each permutation of hand letters to fill the empty slots:
+    for perm in itertools.permutations(hand, len(empty_indices)):
+        candidate = list(seq)
+        placed = {}  # record which positions get a letter from hand
+        for idx, letter in zip(empty_indices, perm):
+            candidate[idx] = letter.lower()
+            placed[idx] = letter.lower()
+        word = "".join(candidate)
+        if check_word(word):
+            # Map indices to board coordinates.
+            placed_positions = {}
+            for idx, letter in placed.items():
+                pos = (start[0] + idx * direction[0], start[1] + idx * direction[1])
+                placed_positions[pos] = letter
+            valid_moves.append((word, direction, start, placed_positions))
+    return valid_moves
 
 class Scrabble:
-    def __init__(self):
-        self.rows, self.cols = 10, 15
-        self.tiles = self.rows * self.cols
+    def __init__(self, rows: int = 10, cols: int = 15, amt_letters: int = 7):
+        self.rows = rows
+        self.cols = cols
+        self.amt_letters = amt_letters
 
-    # brute all words :D
-    def all_pos(self, board: dict[(int, int): str], letters: list[str]) -> list[tuple[str, bool, tuple[int, int]]]:
-        #  -> list[tuple(word, x_true, tuple(x, y))
-        all_possibles = []
-        total_words = 0
-        find_words_graph = tqdm(total=self.tiles, desc="finding all possible moves")  # plot the porgress
+    def all_possible_moves(self, board: dict, hand: list[str], moves_played: list[str]) -> list:
+        """
+        Generate all legal moves based on the current board and the player's hand.
+        This function scans over positions near existing tiles (using remove_impossible)
+        and tries to form words horizontally and vertically.
+        """
+        moves = []
         start_time = time.perf_counter()
-        for y in range(self.rows):
-            for x in range(self.cols):  # go through all tiles
+        # Only consider positions near an anchor.
+        filtered_board = remove_impossible(board)
+        # For each candidate starting position, try horizontal and vertical moves.
+        for (x, y) in tqdm(filtered_board.keys(), total=len(filtered_board), desc="Generating moves"):
+            for length in range(1, self.amt_letters + 1):
+                # Horizontal move (left-to-right)
+                moves.extend(generate_words_from_sequence(board, (x, y), (1, 0), length, hand))
+                # Vertical move (top-to-bottom)
+                moves.extend(generate_words_from_sequence(board, (x, y), (0, 1), length, hand))
+        elapsed_time = time.perf_counter() - start_time
+        print(f"Elapsed needed: {elapsed_time:.6f} seconds")
 
-                add_existing_letters = {}
-                
-                for letter_position in range(1, len(letters) + 1):  # go through words in the next 7 slots
-                    x_current = x + letter_position - 1
-                    # check if still playing on the board (-1 because of interation)
-                    if x_current <= self.cols - 1:
-                        if board[(x_current, y)] is not None:  # there is already a letter at current spot
+        moves_clean = []
 
-                            add_existing_letters[letter_position] = board[(x_current, y)]  # save to add it latter
-                        else:
-                            # get all the possibilities of the space between current and the starting point,
-                            # excluding existing
-
-                            # check if the possible word is touching something on either start or end    
-                            if len(add_existing_letters) >= 1:
-                                for possibility in all_pos_local(letters, letter_position): # add all possibles to list:
-
-                                    # if the word has n existing letter from the board than include it for the word eval
-                                    
-                                    for letter_index, letter_insert in add_existing_letters.items():
-                                        #print(f"{possibility}:{letter_index}:{letter_insert}")
-                                        possibility = insert_substring(possibility.lower(), letter_index , letter_insert.lower())
-#                                        print(possibility)
-#                                        total_words += 1
-                                        if check_word(possibility): # confirmed word time to save it 
-
-                                            word = (possibility, True, (x, y)) # tupple for save
-
-                                            all_possibles.append(word)  # add local valid to all valid
-            
-                """ check vertical"""
-                add_existing_letters = {}
-                
-                for letter_position in range(1, len(letters) + 1):  # go through words in the next 7 slots
-                    y_current = y + letter_position - 1
-                    # check if still playing on the board (-1 because of interation)
-                    if y_current <= self.rows - 1:
-                        if board[(x, y_current)] is not None:  # there is already a letter at current spot
-
-                            add_existing_letters[letter_position] = board[(x, y_current)]  # save to add it latter
-                        else:
-                            # get all the possibilities of the space between current and the starting point,
-                            # excluding existing
-
-                            # check if the possible word is touching something on either start or end
-                            if len(add_existing_letters) >= 1: # the word has to include some letters from the board
-                                for possibility in all_pos_local(letters, letter_position): # add all possibles to list:
-
-                                    # if the word has n existing letter from the board than include it for the word eval
-                                    for letter_index, letter_insert in add_existing_letters.items():
-                                        #print(f"{possibility}:{letter_index}:{letter_insert}")
-                                        possibility = insert_substring(possibility.lower(), letter_index, letter_insert.lower())
-#                                        total_words += 1
-#                                        print(possibility)
-                                        if check_word(possibility): # confirmed word time to save it 
-
-                                            word = (possibility, False, (x, y)) # tupple for save false because y direction 
-
-                                            all_possibles.append(word)  # add local valid to all valid
-                
-                
-#                find_words_graph.update(1) # plot
-        print(f"total legal letter combinations: {total_words}")
-        end_time = time.perf_counter()
-        elapsed_time = end_time - start_time
-        print(f"Elapsed time: {elapsed_time:.6f} seconds")
-
-        return all_possibles
-    def eval_words(self, words: list[type], board: dict[(int, int): str]) -> tuple[str, dict[str: tuple[int, int]]] | dict[str: tuple[int, int]]:
-        # -> (word, {letter:(x, y)})  letter: lay_x, lay_y  # exclude letters alreday on the board
-          # specified [0]
-        word_eval = {}
-
-        for word in words: # score words
-
-            lit_word = word[0] # get string word             
-            word_eval[score_word(lit_word)] = lit_word
-
-        scores = {}
-        higthst_score = 0
-        for score, word in word_eval.items(): # find the higest score
-            print(score,word)
-            scores[word] = score
-
-            if score >= higthst_score:
-                higthst_score = score
-
-        # plot
- 
+        print(f"movves_played_func: {moves_played}")
+        for move in moves:
+            if move[0] not in moves_played and len(move[3]) >= 1: # check if the word was played and adds new lettrs to the board
+                moves_clean.append(move)
+        
+        return moves_clean
 
         
-        word = ("", True, (0, 0))
-        i = 0
-        while word_eval[higthst_score] != word[0]:  # iterate back to best word
-            word = words[i]
-            i += 1
+    def eval_moves(self, moves: list) -> tuple:
+        """
+        Evaluate moves by their Scrabble score and print a summary.
         
-        print(word)
-        
-        lit_word = word[0]
+        Returns a tuple of:
+          (best_move, move_scores)
+        where best_move is the move tuple with the highest score and move_scores is a dict mapping word to score.
+        """
+        best_move = None
+        best_score = 0
+        move_scores = {}
+        for move in moves:
+            word = move[0]
+            score = score_word(word)
+            move_scores[word] = score
+            if score > best_score:
+                best_score = score
+                best_move = move
 
-        sorted_scores = dict(sorted(scores.items(), reverse=True))
-        lengh = 10
-        item = "="
-        print(sorted_scores)
-        proc = lengh / sorted_scores[lit_word]
-
-        for word_l, score in sorted_scores.items():
-            line_l = ""
-
-            for _ in range(round(proc * score)):
-                line_l += item
-
-            line = f"{word_l:<10} | {score:<3} | {line_l}"
-            print(line)
-       
-
-        letter_pos = {}
-        move_dict = {}
-
-        start_x, start_y = word[2]
-        for i, letter in enumerate(list(lit_word)):
-            
-            if word[1]:  # direction x
-                x, y = start_x + i - 1, start_y
-            
-            else: # direction y
-                x, y = start_x, start_y + i - 1 
-            
-            letter_pos[letter] = (x, y)
-            
-            if board[(x, y)] is None:
-                move_dict[letter] = (x, y)                
-
-        word_tuple = (lit_word, letter_pos)
-
-        return word_tuple, move_dict
+        # Display a simple score chart.
+        print("Move Scores:")
+        for word, score in sorted(move_scores.items(), key=lambda x: x[1], reverse=True):
+            bar = "=" * (score // 2)  # simple bar proportional to score
+            print(f"{word:<10} | {score:<3} | {bar}")
+        print(best_move)
+        print(move_scores)
+        return best_move, move_scores
