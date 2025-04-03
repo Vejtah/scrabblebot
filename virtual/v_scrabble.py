@@ -165,6 +165,25 @@ def write_existing() -> None:
 def remove(pos) -> None:
     letters[pos] = None
 
+
+
+def find_click(float: x, float: y) -> int | int:
+    current_x = 0
+    current_y = 0
+
+    while True:
+        if (current_x * t_with) <= x <= ((current_x + 1) * t_with):
+            break
+        else:current_x+=1
+
+    while True:
+        if (current_y * t_height) <= y <= ((current_y + 1) * t_height):
+            break
+        else:current_y+=1
+
+    return current_x, current_y
+
+
 def plot_word(move_tupple: tuple) -> None:
     
     letters_dict = move_tupple[3]
@@ -201,10 +220,11 @@ running = True
 selected = (cols // 2, rows // 2)
 direction = (1, 0)  # auto move selected on letter press
 while running:
+    x, y  = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
             if key in MOVE:  # move selected tile
@@ -215,6 +235,9 @@ while running:
                 remove(selected)
             elif key == "return":
                 find_move()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            click_x, click_y = find_click(x, y)
+            selected = (click_x, click_y)
                 
     # Update the displaybr
     screen.fill(BLACK)
@@ -227,5 +250,4 @@ while running:
 
     # Cap the frame rate
     clock.tick(10)
-
 exit()
