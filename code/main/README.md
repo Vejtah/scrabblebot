@@ -1,10 +1,13 @@
 # Scrabble-Bot SC
 ## compability
+
 The code was written for:
 - Raspberry pi 4 model B,
 - adafruit DC+Stepper Motor hat, (2 stepper motors)
 - PCA9685 Servo Driver hat,
+  
 ## Personalize
+
 You can change:
 - the keys in `keys.py`
 ## You should
