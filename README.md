@@ -5,18 +5,29 @@ Welcome to my project of creating a bot that will be your opponent in the game o
 
 ### Build Your Own
 
-In case you would like to build your own SB (*Scrabble-Bot*), you can find the source code and specifications under `/main`. You will also need a 3D printer—and lots of patience and time. I will add the 3D models eventually, once I get them to a usable state.
+In case you would like to build your own SB (*Scrabble-Bot*), you can find the source code under `/code/main`. 
+You will need:
 
-Don't be afraid to reach out.
+- 3D printer
+- Raspberry pi 4 model B *(Other models will probably work as well, but you I haven't checked)*
+- adafruit DC+Stepper Motor hat, *(to control the 2 stepper motors)*
+- PCA9685 Servo Driver hat
+- *...*
+- patience
+- time
+
+I will add the 3D models to `/3Dmodels` eventually, once I get them to a usable state.
+
+**Don't be afraid to reach out.**
 
 ---
 
 ### Virtual SB
 
-You can use the virtual version of SB located under `/virtual/v_scrabble.py`.
+You can use the virtual version of SB located under `code/virtual/v_scrabble.py`.
 
 ---
-
+## how does it work?
 ### Play
 
 The playing sequence of SB:
