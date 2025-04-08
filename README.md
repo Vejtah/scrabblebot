@@ -12,6 +12,7 @@ You will need:
 - Raspberry pi 4 model B *(Other models will probably work as well, but you I haven't checked)*
 - adafruit DC+Stepper Motor hat, *(to control the 2 stepper motors)*
 - PCA9685 Servo Driver hat
+- at least 5 6mm metal rods for the y axe and the camera holder
 - *...*
 - patience
 - time
