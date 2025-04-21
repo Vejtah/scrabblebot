@@ -1,4 +1,11 @@
 
+def whiteSpaceStart():
+    j = 101010101010100000000000000000 # first 2 lines
+    j = [int(i) for i in str(j)] # turn int to list
+    remove_white_space = j
+    for _ in range(10 * 15):
+        remove_white_space.append(1  )#
+    return remove_white_space
 
 class Constants:#
     def __init__(self):
@@ -27,13 +34,7 @@ class Constants:#
         keyboardName = "Logitech USB Keyboard"
 
     # create the map
-    def whiteSpaceStart():
-        j = 101010101010100000000000000000 # first 2 lines
-        j = [int(i) for i in str(j)] # turn int to list 
-        remove_white_space = j
-        for _ in range(10 * 15):
-            remove_white_space.append(1)#
-        return remove_white_space
+
     
     remove_white_space = whiteSpaceStart()
 

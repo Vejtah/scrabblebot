@@ -7,7 +7,7 @@ Cons = Constants()
 
 class Image:
     def __init__(self):
-        self.cameraIndex = 0
+        self.cameraIndex = 2
         print(f"opening camera {self.cameraIndex}...")
         self.cap = cv2.VideoCapture(self.cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
 
