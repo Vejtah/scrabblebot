@@ -10,7 +10,7 @@ class Keys: # class for all contorols
             try:
                 device = InputDevice(f'/dev/input/event{n}')
                 print(f"Listening on event {n} - {device.path} - {device.name}")
-                if device.name == Cons.keyboardName:
+                if device.name == Cons.System.keyboardName:
                     break
             except FileNotFoundError as e:
                 #print(e)

@@ -1,5 +1,5 @@
 import time
-import board
+import board # type: ignore
 from adafruit_motor import stepper # type: ignore
 from adafruit_motorkit import MotorKit # type: ignore
 from tqdm import tqdm
@@ -9,8 +9,10 @@ from adafruit_motor import servo # type: ignore
 
 from constans import Constants
 from keys import Keys
+
 Cons = Constants()
 Key_c = Keys()
+
 
 class Movement():
     def __init__(self):
@@ -33,6 +35,10 @@ class Movement():
         self.hand.angle = 30
     def colse(self):
         self.hand.angle = 0
+    
+    def release(self) -> None:
+        self.s_x.release() # release to prevent overheat
+        self.s_y.release()
     
     def move(self, x_moveby: int, y_moveby: int):
 
@@ -90,12 +96,12 @@ class Movement():
             Cons.Pos.s_y += y_dir_i
 
             time.sleep(self.sleep / 2)  # finsh the waiting cycle
-
+        
+        #  move the rest 
         if x_moveby >= y_moveby:
             x_left = x_moveby - y_moveby
 
             for _ in range(x_left):
-                print("m")
                 self.s_x.onestep(direction=x_dir)
 
                 x_progress.update(1)
@@ -116,8 +122,7 @@ class Movement():
 
                 time.sleep(self.sleep)
         
-        self.s_x.release() # release to prevent overheat
-        self.s_y.release()
+
                 
 
     def move_to(self, target_x: int, target_y: int):
@@ -126,31 +131,36 @@ class Movement():
 
         # check if move possible
 
-        x_next = Cons.Pos.s_x - x_moveby
-        y_next = Cons.Pos.s_y - y_moveby
+        x_next = Cons.Pos.s_x + x_moveby  # maybe -?? but i dont think so
+        y_next = Cons.Pos.s_y + y_moveby
 
-        if x_next >= 0 and y_next >= 0:
+        if 0 <= x_next <= Cons.Pos.s_x_max and 0 <= y_next <= Cons.Pos.s_y_max:
             print("move possible, proceeding...")
         else:
             print("next move calced in minus: ERROR")
             print("aborting...")
-            return
+            return  # exit move funtion
         
-        self.move(x_moveby, y_moveby)
+        return x_moveby, y_moveby
         
 
 
     def move_to_piece(self, x: int, y: int):
         #x
         move_range_x = Cons.Pos.s_x_max - Cons.Pos.x_start_offset - Cons.Pos.x_end_offset
-        piece_x = move_range_x / Cons.cols #cols = 15
+        piece_x = move_range_x / Cons.cols #cols = 15  - calculate the steps rq for one tile
 
         move_range_y = Cons.Pos.s_y_max - Cons.Pos.y_start_offset - Cons.Pos.y_end_offset
         piece_y = move_range_y / Cons.rows #rows = 12 ( 10 + 2)
 
         # add starting offset
-        piece_x_pos = round((piece_x * x) + Cons.Pos.x_start_offset)
-        piece_y_pos = round((piece_y * y) + Cons.Pos.y_start_offset)
+
+        # reverse the x and y 
+
+        
+
+        piece_x_pos = round(((piece_x) * (Cons.cols - x)) + Cons.Pos.x_start_offset)
+        piece_y_pos = round((piece_y * (Cons.rows - y)) + Cons.Pos.y_start_offset)
 
         return piece_x_pos, piece_y_pos
 
@@ -198,6 +208,12 @@ class Movement():
                 
                 self.MaualMovement(key, amt=step)
         print("exiting manual...")
+        
+    
+    
+        
+        
+        
 
     
 
