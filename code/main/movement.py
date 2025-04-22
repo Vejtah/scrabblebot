@@ -29,8 +29,6 @@ class Movement:
 
         self.hand = servo.Servo(self.pca.channels[0])
 
-
-    
     def open(self):
         self.hand.angle = 30
     def close(self):
