@@ -39,16 +39,16 @@ class SHIT:
 
         # Clean and return result
         result = result.strip().upper()
-        
+
         #print(f"mid_point: {mid_point}")
         #print(f"black_val: {black_val}")
 
-        if len(result) == 1 and result.isalpha() and black_val < mid_point:
+        if len(result) == 1 and result.isalpha():
             # compare the dark pixel prc to the data
 
             return result
 
-        return None
+        return None  # in some cases the black % may not work
 
     def get_black_pixel_percentage(self, gray, threshold=30) -> float:
         # Convert to grayscale if not already
@@ -64,4 +64,8 @@ class SHIT:
         # Calculate percentage
         percentage = (black_pixels / total_pixels) * 100
         return percentage
-        
+
+    def is_letter(self, black_val:float)->bool:
+        if black_val < Dta.clac_midpoint(Dta.load()):
+            return True
+        return False

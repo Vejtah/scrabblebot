@@ -154,7 +154,10 @@ class Image:
         for y in range(rows):
             line = ""
             for x in range(cols):
-                line += f" | {grid[x, y]}"
+                pos = grid[x, y]
+                if pos is None:  # replace None with _
+                    pos = "_"
+                line += f" | {pos}"
             print(line)
         print("")
     

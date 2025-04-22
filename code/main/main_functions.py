@@ -29,13 +29,13 @@ class Functions:
         self.version = "1.0.0"
         pass
 
-    def shit(self, frame) -> str:
+    def shit(self, frame) -> str|None:
         resized = Sht.resize(frame)
         black_prc = Sht.get_black_pixel_percentage(resized)
-
-        letter = Sht.extract_letter(resized, black_prc)
-        return letter
-
+        if Sht.is_letter(black_prc):
+            letter = Sht.extract_letter(resized, black_prc)
+            return letter
+        return None
     # have to have the function here bc methods shouldn't be calling other methods in the same class
     def move_to(self, target_x: int, target_y: int) -> None:
 
