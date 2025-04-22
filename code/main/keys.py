@@ -9,7 +9,7 @@ class Keys: # class for all controls
         for n in range(Cons.System.rasp_pi_ports):
             try:
                 device = InputDevice(f'/dev/input/event{n}')
-                print(f"Listening on event {n} - {device.path} - {device.name}")
+                #print(f"Listening on event {n} - {device.path} - {device.name}")
                 if device.name == Cons.System.keyboardName:
 
                     print(f"Listening on {device.path} - {device.name} : OK")

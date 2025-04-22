@@ -45,7 +45,8 @@ print("entering main loop...")
 print("opening hand...")
 
 Mov.open() # open the hand in the start
-    
+Img.init()
+
 #  use try to use finally to release motors
 try:
     key = ""           

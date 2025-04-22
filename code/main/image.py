@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-#import time
+import time
 
 #from packaging.tags import interpreter_version
 
@@ -12,11 +12,12 @@ def invert(x, max_val:int):
 
 class Image:
     def __init__(self):
-        self.cameraIndex = 0
+        self.cameraIndex = 1
+        
         print(f"opening camera {self.cameraIndex}...")
+        
         self.cap = cv2.VideoCapture(self.cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
-
-
+        
         print("checking if cam is opened...")
         if not self.cap.isOpened():
             
