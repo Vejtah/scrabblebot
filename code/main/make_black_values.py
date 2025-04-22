@@ -18,7 +18,7 @@ class Data:
             data = json.load(f)
         return data
 
-    def clac_midpint(self, data):
+    def clac_midpoint(self, data):
         """
         find the highest black val for the frames with letters and the lowest for the frames without tiles
         than find a midpoint which will be used to determine if there is a letters or not later on (using the network)
@@ -30,6 +30,6 @@ class Data:
         nones_smallest_val = nones[0]
 
         midpoint = (letters_highest_val + nones_smallest_val) / 2
-        midpoint += Cons.Image.add_black_prc  # add some extra procents to shift the midpoint up
+        midpoint += Cons.Image.add_black_prc  # add some extra % to shift the midpoint up
 
         return midpoint

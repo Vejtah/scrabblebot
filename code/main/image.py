@@ -1,9 +1,14 @@
 import numpy as np
 import cv2
-import time
+#import time
+
+#from packaging.tags import interpreter_version
 
 from constans import Constants
 Cons = Constants()
+
+def invert(x, max_val:int):
+    return (max_val - 1) - x
 
 class Image:
     def __init__(self):
@@ -87,31 +92,33 @@ class Image:
         return grid_parts
 
 
-    def selectFrames(self, frames: list):
+    def select_frames(self, frames: list):
         newFrames = []
         for frame, i in zip(frames, Cons.remove_white_space):
             if i == 1:
                 newFrames.append(frame)
         return newFrames
     
-    def transformList(self, letter_list: list):
-        ll = letter_list # crate copy of list idk if needed
+    def transform_list(self, letter_list: list):
+        ll = letter_list # crate copy of list IDK if needed
         choose =[]
         grid = {}
         for _ in range(7): # extract first 7 letters 
             choose.append(ll.pop(0))
         """
-        invert grid here so the 0|0 is left down
+        Invert grid here so the 0|0 is left down
         """
-        i = 0
-        for y in range(10):
-            for x in range(15):
+        i = 40
+        for y in range(Cons.rows):
+            for x in range(Cons.cols):
+                x = invert(x, Cons.cols)
+                y = invert(y, Cons.rows)
                 grid[x, y] = ll[i]
                 i += 1
 
         return choose, grid
     
-    def GetTransformedFrame(self): 
+    def get_transformed_frame(self):
 
         
         while True:
@@ -126,38 +133,16 @@ class Image:
 
             # Convert the frame to grayscale and readable format
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            if False:
-                gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-                denoised_frame = cv2.fastNlMeansDenoisingColored(frame, None, h=10, hColor=10, templateWindowSize=7, searchWindowSize=21)
-
-                hsv = cv2.cvtColor(denoised_frame, cv2.COLOR_BGR2HSV)
-            else:
-                extractAllPoints = [(103, 17), (479, 9), (485, 464), (104, 465)]# haha markers are not working
-
-                
-            # Detect ArUco markers in the frame
-
-            print("looking for marks")
-            
-            # If markers are detected
-            
-
-                
-            if len(extractAllPoints) == 4:
-                print("all 4 marks found: OK")
-                src_points = np.array(extractAllPoints, dtype=np.float32)
-                frame = self.warp_frame_to_rectangle(frame, src_points) # wrap 
-                return frame # return the croped frame
-            
-            else:
-                print(f"only {len(extractAllPoints)} markes found: ERROR")
-                time.sleep(0.5) # wait 0,5 s before reattempting to find all markers
-                print("trying again...")
+            src_points = np.array(Cons.Image.extractAllPoints, dtype=np.float32)
+            frame = self.warp_frame_to_rectangle(frame, src_points) # wrap
+            return frame # return the cropped frame
 
     
-    def show_grid(self, grid: dict, choose: list = [], rows=10, cols=15):
+    def show_grid(self, grid: dict, choose=None, rows=10, cols=15):
 
+        if choose is None:
+            choose = []
         print("")
         line = ""
         for letter in choose:
@@ -176,9 +161,3 @@ class Image:
 
     def end(self):
         self.cap.release()
-
-
-
-
-
-

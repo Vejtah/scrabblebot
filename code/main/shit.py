@@ -39,7 +39,7 @@ class SHIT:
 
         # Clean and return result
         result = result.strip().upper()
-        mid_point = Dta.clac_midpint(Dta.load())
+        mid_point = Dta.clac_midpoint(Dta.load())
 
         print(f"mid_point: {mid_point}")
         print(f"black_val: {black_val}")

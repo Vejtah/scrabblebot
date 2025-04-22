@@ -1,4 +1,4 @@
-def whiteSpaceStart():
+def white_space_start():
     j = 101010101010100000000000000000  # first 2 lines
     j = [int(i) for i in str(j)]  # turn int to list
     remove_white_space = j
@@ -34,10 +34,11 @@ class Constants:  #
         root_dir = "/home/malina/sb/scrabblebot/code/main/"
         keyboardName = "Logitech USB Keyboard"
         json_path = "black_values.json"
+        rasp_pi_ports = 10  # amt of ports to search for devices
 
     # create the map
 
-    remove_white_space = whiteSpaceStart()
+    remove_white_space = white_space_start()
 
     pointsPositions = [1, 0, 3, 2]
     rows, cols = 10 + 2, 15  # 10 for grid and 2 for use pieces
@@ -45,6 +46,7 @@ class Constants:  #
     class Image:
         available_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         add_black_prc = 10  # use if the letter recognition isn't working properly
+        extractAllPoints = [(64, 87), (493, 68), (508, 426), (76, 443)]
 
     played_moves = []  # list to store all played moves
 

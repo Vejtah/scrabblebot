@@ -1,5 +1,5 @@
 import time
-from wsgiref.util import request_uri
+#from wsgiref.util import request_uri
 
 from tqdm import tqdm
 
@@ -24,18 +24,25 @@ Mov.release() #  release the motors
 
 """play def"""
 
-def SHIT(frame) -> str:
+def shit(frame) -> str:
     resized = Sht.resize(frame)
     black_prc = Sht.get_black_pixel_percentage(resized)
     letter = Sht.extract_letter(resized, black_prc)
     return letter
 
-# have to have the function here bc methods shouldnt be calling other methods in the same class
-def move_to(target_x: int, target_y: int):
-    Mov.move(move_to(target_x, target_y))
+# have to have the function here bc methods shouldn't be calling other methods in the same class
+def move_to(target_x: int, target_y: int)->None:
+
+    x_move_by, y_move_by = Mov.move_to(target_x, target_y)
+
+    Mov.move(x_move_by, y_move_by)
 
 def move_to_piece(x, y):
-    move_to(Mov.move_to_piece(x, y))
+
+    x_target, y_target = Mov.move_to_piece(x, y)
+
+
+    move_to(x_target, y_target)
 
 def ret() -> None:
     move_to_piece(14, 10)
@@ -46,47 +53,47 @@ def ret() -> None:
     #Mov.open() # open the hand
     
     
-def GetGrid():
-    print("transforing frame...")
-    transformedFrame = Img.GetTransformedFrame()
+def get_grid():
+    print("transforming frame...")
+    transformed_frame = Img.get_transformed_frame()
 
-    print("spliting frame...")
-    frames = Img.split_into_grid(transformedFrame, Cons.rows, Cons.cols)
+    print("splitting frame...")
+    frames = Img.split_into_grid(transformed_frame, Cons.rows, Cons.cols)
 
     print("selecting frames...")
-    frames = Img.selectFrames(frames)
+    frames = Img.select_frames(frames)
 
     # preform a check 
     if len(frames) == 157:
         print("Frame Selection : OK")
     else:
         print("Error in split or select: ERROR")
-        return # add a returnpoint IDK
+        return # add a return point IDK
 
     print("transforming frames to string...")
     letters = []
 
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
-        letters.append(SHIT(frame))  # use network
+        letters.append(shit(frame))  # use network
 
     print("transforming into a dict")
     
-    choose, grid = Img.transformList(letters)
+    choose, grid = Img.transform_list(letters)
     return grid, choose
 
 def best_word(grid, choose):
-    global Cons  # get curent moves  - may be an error
+    global Cons  # get current moves  - may be an error
     
     best_move, _ = s.eval_moves(s.all_possible_moves(grid, choose, Cons.played_moves))
     
-    # detect if theher arent any avlb words
+    # detect if there aren't any available words
     
     
     try:
-        w = best_move[0]  # try to get the word
+        _ = best_move[0]  # try to get the word
     except TypeError:
-        print("cought")
+        print("caught")
         return 0  #  code catch
     
     return best_move
@@ -109,9 +116,9 @@ def grab_letter(letter_pos) -> None:
     
 
 
-def build_word(move_tupple, choose: list) -> str | None:  # depending on if the bot lost or not
+def build_word(move_tuple, choose: list) -> str | None:  # depending on if the bot lost or not
     
-    letters_dict = move_tupple[3]
+    letters_dict = move_tuple[3]
     
     for (x, y), letter in letters_dict.items():
 
@@ -125,7 +132,7 @@ def build_word(move_tupple, choose: list) -> str | None:  # depending on if the 
         ret()  # return to start and calib
 
 def play():
-    grid, choose = GetGrid()
+    grid, choose = get_grid()
     Img.show_grid(grid, choose)
     
     word = best_word(grid, choose)
@@ -144,13 +151,13 @@ print("opening hand...")
 
 Mov.open() # open the hand in the start
     
-#  use try to use fimnally to release motors
+#  use try to use finally to release motors
 try:
     key = ""           
     while key != keys.AllKeys.KEY_QUIT:
 
         print(f"press keys to continue, for help press {keys.AllKeys.KEY_HELP}...")
-        key = keys.scanKeys()
+        key = keys.scan_keys()
 
         if key == keys.AllKeys.KEY_PLAY:
             print("entering play sequence...")
@@ -159,7 +166,7 @@ try:
                 break
         elif key == keys.AllKeys.KEY_NUMPAD:
             num = keys.numpad()
-            print(f"inputed: {num}")
+            print(f"inputted: {num}")
 
         elif key == keys.AllKeys.KEY_HELP:
             keys.help()
@@ -172,20 +179,21 @@ try:
 
         elif key == keys.AllKeys.KEY_QUIT: # confirm to quit 
             print(f"confirm to quit ({keys.AllKeys.KEY_CONFIRM})")
-            key = keys.scanKeys()
+            key = keys.scan_keys()
             if key == keys.AllKeys.KEY_CONFIRM:
                 print("confirmed")
                 key = keys.AllKeys.KEY_QUIT # confirmed quit (set back to confirmed...)
         else:
             print(key)
-            
+
+
 #except Exception as e:
     #print(e)
     
 finally:
+    """end sequence"""
     Mov.release()
     Img.end()
 
 print("quitting")
 
-"""end sequence"""

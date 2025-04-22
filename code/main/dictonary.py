@@ -14,7 +14,7 @@ with open(save_dir, "r") as f:
     # Make sure your file is sorted. If not certain, do:
     dictionary_list.sort()
 
-class Us_en:
+class UsEn:
     def __init__(self):
         self.dictionary = dictionary_list
     
@@ -27,5 +27,5 @@ class Us_en:
         return idx < len(self.dictionary) and self.dictionary[idx] == word
 
 if __name__ == "__main__":
-    d = Us_en()
+    d = UsEn()
     print(d.check("metronome"))

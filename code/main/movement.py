@@ -14,7 +14,7 @@ Cons = Constants()
 Key_c = Keys()
 
 
-class Movement():
+class Movement:
     def __init__(self):
         
         self.kit = MotorKit(i2c=board.I2C())
@@ -33,53 +33,53 @@ class Movement():
     
     def open(self):
         self.hand.angle = 30
-    def colse(self):
+    def close(self):
         self.hand.angle = 0
     
     def release(self) -> None:
         self.s_x.release() # release to prevent overheat
         self.s_y.release()
     
-    def move(self, x_moveby: int, y_moveby: int):
+    def move(self, x_move_by: int, y_move_by: int):
 
-        if 0 <= (Cons.Pos.s_x + x_moveby) <= Cons.Pos.s_x_max:
+        if 0 <= (Cons.Pos.s_x + x_move_by) <= Cons.Pos.s_x_max:
             print("move X pos: OK")
         else:
             print("move X unable: ERROR")
             return
 
 
-        if 0 <= (Cons.Pos.s_y + y_moveby) <= Cons.Pos.s_y_max:
+        if 0 <= (Cons.Pos.s_y + y_move_by) <= Cons.Pos.s_y_max:
             print("move Y pos: OK")
         else:
             print("move Y unable: ERROR")
             return
 
 
-        if x_moveby >= 0:
+        if x_move_by >= 0:
             x_dir = stepper.FORWARD
             x_dir_i = 1
 
         else:
             x_dir = stepper.BACKWARD
-            x_moveby *= -1
+            x_move_by *= -1
             x_dir_i = -1
 
 
-        if y_moveby >= 0:
+        if y_move_by >= 0:
             y_dir = stepper.FORWARD
             y_dir_i = 1
 
         else:
             y_dir = stepper.BACKWARD
-            y_moveby *= -1
+            y_move_by *= -1
             y_dir_i = -1
 
-        x_progress = tqdm(total=x_moveby, desc="X move Progress")
-        y_progress = tqdm(total=y_moveby, desc="Y move Progress")
+        x_progress = tqdm(total=x_move_by, desc="X move Progress")
+        y_progress = tqdm(total=y_move_by, desc="Y move Progress")
 
         # combine x and y movement:
-        while x_moveby >= 1 and y_moveby >= 1:
+        while x_move_by >= 1 and y_move_by >= 1:
             
             self.s_x.onestep(direction=x_dir)
             time.sleep(self.sleep / 2) # wait 1/2 of waiting cycle
@@ -89,8 +89,8 @@ class Movement():
             x_progress.update(1)
             y_progress.update(1)
 
-            x_moveby -= 1
-            y_moveby -= 1
+            x_move_by -= 1
+            y_move_by -= 1
 
             Cons.Pos.s_x += x_dir_i # update location +1 if pos else -1
             Cons.Pos.s_y += y_dir_i
@@ -98,8 +98,8 @@ class Movement():
             time.sleep(self.sleep / 2)  # finsh the waiting cycle
         
         #  move the rest 
-        if x_moveby >= y_moveby:
-            x_left = x_moveby - y_moveby
+        if x_move_by >= y_move_by:
+            x_left = x_move_by - y_move_by
 
             for _ in range(x_left):
                 self.s_x.onestep(direction=x_dir)
@@ -111,7 +111,7 @@ class Movement():
                 time.sleep(self.sleep)
 
         else:
-            y_left = y_moveby - x_moveby
+            y_left = y_move_by - x_move_by
 
             for _ in range(y_left):
                 self.s_y.onestep(direction=y_dir)
@@ -125,23 +125,23 @@ class Movement():
 
                 
 
-    def move_to(self, target_x: int, target_y: int):
-        x_moveby = target_x - Cons.Pos.s_x
-        y_moveby = target_y - Cons.Pos.s_y
+    def move_to(self, target_x: int, target_y: int) -> {int | float, int | float}:
+        x_move_by = target_x - Cons.Pos.s_x
+        y_move_by = target_y - Cons.Pos.s_y
 
         # check if move possible
 
-        x_next = Cons.Pos.s_x + x_moveby  # maybe -?? but i dont think so
-        y_next = Cons.Pos.s_y + y_moveby
+        x_next = Cons.Pos.s_x + x_move_by  # maybe -?? but i dont think so
+        y_next = Cons.Pos.s_y + y_move_by
 
         if 0 <= x_next <= Cons.Pos.s_x_max and 0 <= y_next <= Cons.Pos.s_y_max:
             print("move possible, proceeding...")
         else:
-            print("next move calced in minus: ERROR")
+            print("next move called in minus: ERROR")
             print("aborting...")
-            return  # exit move funtion
+            return  # exit move function
         
-        return x_moveby, y_moveby
+        return x_move_by, y_move_by
         
 
 
@@ -159,20 +159,20 @@ class Movement():
 
         
 
-        piece_x_pos = ((piece_x) * (Cons.cols - x)) + Cons.Pos.x_start_offset
+        piece_x_pos = (piece_x * (Cons.cols - x)) + Cons.Pos.x_start_offset
 
         piece_x_pos += piece_x / 2  # add 1/2 of the tile to be in the middle
 
         piece_y_pos = round((piece_y * (Cons.rows - y)) + Cons.Pos.y_start_offset)
-        
+
         piece_y_pos += piece_y / 2 # add 1/2 of the tile to be in the middle
 
         return round(piece_x_pos), round(piece_y_pos)
 
 
-    def MaualMovement(self, key: int, amt=5):
+    def manual_movement(self, key: int, amt=5):
 
-        action = Key_c.MANUAL_MOVMENT.index(key)
+        action = Key_c.MANUAL_MOVEMENT.index(key)
         """
         0 = x+
         1 = x-
@@ -198,7 +198,7 @@ class Movement():
 
 
     def manual(self):
-        print("entering maual movement...")
+        print("entering manual movement...")
         print("")
         print("select step: (int)")
         step = Key_c.numpad()
@@ -208,18 +208,8 @@ class Movement():
 
         key =""
         while key != Key_c.AllKeys.KEY_QUIT:
-            key = Key_c.scanKeys()
-            if key in Key_c.MANUAL_MOVMENT:
+            key = Key_c.scan_keys()
+            if key in Key_c.MANUAL_MOVEMENT:
                 
-                self.MaualMovement(key, amt=step)
+                self.manual_movement(key, amt=step)
         print("exiting manual...")
-        
-    
-    
-        
-        
-        
-
-    
-
-    

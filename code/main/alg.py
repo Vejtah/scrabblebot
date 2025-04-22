@@ -4,9 +4,9 @@ import time
 
 # Set up the dictionary for word validation.
 
-from dictonary import Us_en
+from dictonary import UsEn
 
-d = Us_en()
+d = UsEn()
 
 def check_word(word: str) -> bool:
     """Return True if word has length>=2 and is in the dictionary."""
@@ -22,8 +22,8 @@ def score_word(word: str) -> int:
         'Y': 4, 'Z': 10
     }
     actual_score = sum(scores[letter.upper()] for letter in word)
-    lenth_score = len(word) + 2 # make lengh a facor as well 
-    return actual_score * lenth_score
+    length_score = len(word) + 2 # make length a factor as well
+    return actual_score * length_score
 
 def remove_impossible(board: dict) -> dict:
     """
@@ -135,9 +135,9 @@ class Scrabble:
 
         moves_clean = []
 
-        print(f"movves_played_func: {moves_played}")
+        print(f"moves_played_func: {moves_played}")
         for move in moves:
-            if move[0] not in moves_played and len(move[3]) >= 1: # check if the word was played and adds new lettrs to the board
+            if move[0] not in moves_played and len(move[3]) >= 1: # check if the word was played and adds new letters to the board
                 moves_clean.append(move)
         
         return moves_clean

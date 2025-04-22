@@ -4,20 +4,20 @@ from constans import Constants
 
 Cons = Constants()
 
-class Keys: # class for all contorols
+class Keys: # class for all controls
     def __init__(self):
-        for n in range(10):
+        for n in range(Cons.System.rasp_pi_ports):
             try:
                 device = InputDevice(f'/dev/input/event{n}')
                 print(f"Listening on event {n} - {device.path} - {device.name}")
                 if device.name == Cons.System.keyboardName:
+
+                    print(f"Listening on {device.path} - {device.name} : OK")
                     break
-            except FileNotFoundError as e:
+
+            except FileNotFoundError as _:
                 #print(e)
                 pass
-        
-        print(f"Listening on {device.path} - {device.name} : OK")
-
 
         self.device = device
 
@@ -33,7 +33,7 @@ class Keys: # class for all contorols
         KEY_NUMPAD = "KEY_N"
         KEY_MANUAL = "KEY_M"
 
-    MANUAL_MOVMENT = [AllKeys.KEY_MOVE_Xp, AllKeys.KEY_MOVE_Xn, AllKeys.KEY_MOVE_Yp, AllKeys.KEY_MOVE_Yn]
+    MANUAL_MOVEMENT = [AllKeys.KEY_MOVE_Xp, AllKeys.KEY_MOVE_Xn, AllKeys.KEY_MOVE_Yp, AllKeys.KEY_MOVE_Yn]
 
 
     numPad = {
@@ -49,7 +49,7 @@ class Keys: # class for all contorols
         "KEY_KP9": 9
     }
 
-    def scanKeys(self):
+    def scan_keys(self):
         for event in self.device.read_loop():
             if event.type == ecodes.EV_KEY:
                 key_event = categorize(event)
@@ -65,7 +65,7 @@ class Keys: # class for all contorols
         num = ""
         key = ""
         while key != self.AllKeys.KEY_CONFIRM:
-            key = self.scanKeys()
+            key = self.scan_keys()
             if key in self.numPad:
                 num += str(self.numPad[key])
                 print(num)
