@@ -29,7 +29,7 @@ class SHIT:
     def extract_letter(self, resized, black_val):
         # Convert to grayscale
 
-        cv2.imshow("prepared", resized)
+        #cv2.imshow("prepared", resized)
 
         # OCR config: Single character mode with whitelist
         config = r'--psm 10 -c tessedit_char_whitelist=' + Cons.Image.available_letters
@@ -39,10 +39,9 @@ class SHIT:
 
         # Clean and return result
         result = result.strip().upper()
-        mid_point = Dta.clac_midpoint(Dta.load())
-
-        print(f"mid_point: {mid_point}")
-        print(f"black_val: {black_val}")
+        
+        #print(f"mid_point: {mid_point}")
+        #print(f"black_val: {black_val}")
 
         if len(result) == 1 and result.isalpha() and black_val < mid_point:
             # compare the dark pixel prc to the data
@@ -65,3 +64,4 @@ class SHIT:
         # Calculate percentage
         percentage = (black_pixels / total_pixels) * 100
         return percentage
+        

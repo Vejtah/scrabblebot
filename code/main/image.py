@@ -108,7 +108,7 @@ class Image:
         """
         Invert grid here so the 0|0 is left down
         """
-        i = 40
+        i = 0
         for y in range(Cons.rows):
             for x in range(Cons.cols):
                 x = invert(x, Cons.cols)

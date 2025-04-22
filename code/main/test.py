@@ -13,7 +13,7 @@ from keys import Keys
 from image import Image
 from alg import Scrabble
 
-from main_control import Functions
+#from main_control import Functions
 
 Mov = Movement()  # movement from Movement
 Cons = Constants()
@@ -22,7 +22,7 @@ keys = Keys()
 Img = Image()
 s = Scrabble()
 
-Functions = Functions()
+#F = Functions()
 
 Mov.release() #  release the motors
 
@@ -31,4 +31,4 @@ file to test the code in different ways
 """
 
 if __name__ == "__main__":
-    Functions.grab_letter(0)
+    Mov.open()

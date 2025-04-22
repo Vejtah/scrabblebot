@@ -27,11 +27,13 @@ Mov.release() #  release the motors
 class Functions:
 
     def __init__(self):
+        self.version = "1.0.0"
         pass
 
     def shit(self, frame) -> str:
         resized = Sht.resize(frame)
         black_prc = Sht.get_black_pixel_percentage(resized)
+        
         letter = Sht.extract_letter(resized, black_prc)
         return letter
 
