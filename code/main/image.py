@@ -100,7 +100,9 @@ class Image:
         grid = {}
         for _ in range(7): # extract first 7 letters 
             choose.append(ll.pop(0))
-        
+        """
+        invert grid here so the 0|0 is left down
+        """
         i = 0
         for y in range(10):
             for x in range(15):

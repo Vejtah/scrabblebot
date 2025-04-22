@@ -32,6 +32,7 @@ class Constants:#
     class System:
         root_dir = "/home/malina/sb/scrabblebot/code/main/"
         keyboardName = "Logitech USB Keyboard"
+        json_path = "black_values.json"
 
     # create the map
 
@@ -40,8 +41,9 @@ class Constants:#
 
     pointsPositions = [1, 0, 3, 2]
     rows, cols = 10 + 2, 15 # 10 for grid and 2 for use pieces
-
-    
+    class Image:
+        available_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        add_black_prc = 10  # use if the letter recognition isn't working properly
     
     played_moves = [] #  list to store all played moves
 

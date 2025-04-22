@@ -1,4 +1,6 @@
 import time
+from wsgiref.util import request_uri
+
 from tqdm import tqdm
 
 """ split into Classes"""
@@ -13,7 +15,7 @@ from alg import Scrabble
 
 Mov = Movement()  # movement from Movement
 Cons = Constants()
-shit = SHIT()
+Sht = SHIT()
 keys = Keys()
 Img = Image()
 s = Scrabble()
@@ -21,6 +23,12 @@ s = Scrabble()
 Mov.release() #  release the motors
 
 """play def"""
+
+def SHIT(frame) -> str:
+    resized = Sht.resize(frame)
+    black_prc = Sht.get_black_pixel_percentage(resized)
+    letter = Sht.extract_letter(resized, black_prc)
+    return letter
 
 # have to have the function here bc methods shouldnt be calling other methods in the same class
 def move_to(target_x: int, target_y: int):
@@ -59,9 +67,9 @@ def GetGrid():
     letters = []
 
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
-        letters.append(shit.SHIT(frame))  # use network
-        time.sleep(0.005)  # remove (simulate the loading)
-    
+
+        letters.append(SHIT(frame))  # use network
+
     print("transforming into a dict")
     
     choose, grid = Img.transformList(letters)
