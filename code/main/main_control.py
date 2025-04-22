@@ -24,13 +24,15 @@ Mov.release() #  release the motors
 
 """play def"""
 
-def shit(frame) -> str:
+def shit(frame, whole_frame) -> str:
     resized = Sht.resize(frame)
     black_prc = Sht.get_black_pixel_percentage(resized)
-
-    letter = Sht.extract_letter(resized, black_prc)
-    return letter
-
+    
+    if Sht.is_letter(black_prc):
+        letter = Sht.extract_letter(resized, black_prc)
+        return letter
+    return None
+    
 # have to have the function here bc methods shouldn't be calling other methods in the same class
 def move_to(target_x: int, target_y: int)->None:
 
@@ -57,7 +59,7 @@ def ret() -> None:
 def get_grid():
     print("transforming frame...")
     transformed_frame = Img.get_transformed_frame()
-
+    
     print("splitting frame...")
     frames = Img.split_into_grid(transformed_frame, Cons.rows, Cons.cols)
 
@@ -73,10 +75,13 @@ def get_grid():
 
     print("transforming frames to string...")
     letters = []
-
+    
+    prc_of_black_view = Sht.get_black_pixel_percentage(transformed_frame, gray_scale=False)
+    print(f"procent of black in wthe whole frame: {prc_of_black_view}")
+    
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
-        letters.append(shit(frame))  # use network
+        letters.append(shit(frame, transformed_frame))  # use network
 
     print("transforming into a dict")
 
@@ -135,15 +140,21 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
 
 def play():
     grid, choose = get_grid()
+    #print(grid)
+    #print(choose)
     Img.show_grid(grid, choose)
     
+    for letter in choose:
+        if letter is None:
+            return 2
+    
     word = best_word(grid, choose)
-    if word == 0:
-        return 0
+    if word == 1:
+        return 1
     
     Cons.played_moves.append(word[0])  # add word to played moves
     build_word(word, choose)
-    return 1
+    return 0
     
 
 """main loop"""
@@ -163,9 +174,20 @@ try:
 
         if key == keys.AllKeys.KEY_PLAY:
             print("entering play sequence...")
-            if play() == 0:
+            rc = play()  # play return code
+            
+            if rc == 0:
+                pass
+            elif rc == 1:
+                
                 print("the bot has lost")
                 break
+                
+            elif rc == 2:
+                print("not all choose spaces filled: ERORR")
+                
+                
+                
         elif key == keys.AllKeys.KEY_NUMPAD:
             num = keys.numpad()
             print(f"inputted: {num}")

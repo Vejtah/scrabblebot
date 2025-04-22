@@ -103,17 +103,27 @@ class Image:
         ll = letter_list # crate copy of list IDK if needed
         choose =[]
         grid = {}
+        #print(f"len ll: {len(ll)}")
         for _ in range(7): # extract first 7 letters 
             choose.append(ll.pop(0))
+        #print(f"len ll: {len(ll)}")
+
         """
-        Invert grid here so the 0|0 is left down
+        without inverting y the 0|0 is left top
+        Invert y grid here so the 0|0 is left down
         """
         i = 0
-        for y in range(Cons.rows):
+        for y in range(Cons.rows - 2): # remove the 2 rows of not grid
+            
+            y = invert(y, Cons.rows - 2)
+
             for x in range(Cons.cols):
-                x = invert(x, Cons.cols)
-                y = invert(y, Cons.rows)
+ 
+                #print(i)
+                if i == 150:
+                        print(x, y) 
                 grid[x, y] = ll[i]
+                
                 i += 1
 
         return choose, grid

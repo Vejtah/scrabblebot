@@ -50,9 +50,11 @@ class SHIT:
 
         return None  # in some cases the black % may not work
 
-    def get_black_pixel_percentage(self, gray, threshold=30) -> float:
+    def get_black_pixel_percentage(self, gray, gray_scale=True, threshold=30) -> float:
         # Convert to grayscale if not already
-        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        if not gray_scale:
+            gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
+        #
 
         # Create a binary mask where black pixels are 1 (below threshold)
         black_mask = gray < threshold

@@ -45,7 +45,7 @@ class Constants:  #
 
     class Image:
         available_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        add_black_prc = 10  # use if the letter recognition isn't working properly
+        add_black_prc = 0  # use if the letter recognition isn't working properly
         extractAllPoints = [(64, 87), (493, 68), (508, 426), (76, 443)]
 
     played_moves = []  # list to store all played moves
