@@ -159,10 +159,15 @@ class Movement():
 
         
 
-        piece_x_pos = round(((piece_x) * (Cons.cols - x)) + Cons.Pos.x_start_offset)
-        piece_y_pos = round((piece_y * (Cons.rows - y)) + Cons.Pos.y_start_offset)
+        piece_x_pos = ((piece_x) * (Cons.cols - x)) + Cons.Pos.x_start_offset
 
-        return piece_x_pos, piece_y_pos
+        piece_x_pos += piece_x / 2  # add 1/2 of the tile to be in the middle
+
+        piece_y_pos = round((piece_y * (Cons.rows - y)) + Cons.Pos.y_start_offset)
+        
+        piece_y_pos += piece_y / 2 # add 1/2 of the tile to be in the middle
+
+        return round(piece_x_pos), round(piece_y_pos)
 
 
     def MaualMovement(self, key: int, amt=5):
