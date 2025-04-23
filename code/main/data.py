@@ -9,12 +9,12 @@ class Data:
     def __init__(self):
         pass
 
-    def write(self, data):
-        with open(json_path, "w", encoding="utf-8") as f:
+    def write(self, data, path):
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 
-    def load(self):
-        with open(json_path, "r", encoding="utf-8") as f:
+    def load(self, path):
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
 

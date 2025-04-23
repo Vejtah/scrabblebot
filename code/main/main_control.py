@@ -1,6 +1,6 @@
 import time
 #from wsgiref.util import request_uri
-
+import cv2
 from tqdm import tqdm
 
 """ split into Classes"""
@@ -24,11 +24,12 @@ Mov.release() #  release the motors
 
 """play def"""
 
-def shit(frame, whole_frame) -> str:
+def shit(frame, bw=None) -> str:
     resized = Sht.resize(frame)
-    black_prc = Sht.get_black_pixel_percentage(resized)
+    black_prc = Sht.get_black_pixel_percentage(resized, bw=bw)
     
     if Sht.is_letter(black_prc):
+        cv2.imshow("letter", frame)
         letter = Sht.extract_letter(resized, black_prc)
         return letter
     return None
@@ -59,7 +60,7 @@ def ret() -> None:
 def get_grid():
     print("transforming frame...")
     transformed_frame = Img.get_transformed_frame()
-    
+    cv2.imshow("trans", transformed_frame)
     print("splitting frame...")
     frames = Img.split_into_grid(transformed_frame, Cons.rows, Cons.cols)
 
@@ -76,12 +77,29 @@ def get_grid():
     print("transforming frames to string...")
     letters = []
     
-    prc_of_black_view = Sht.get_black_pixel_percentage(transformed_frame, gray_scale=False)
-    print(f"procent of black in wthe whole frame: {prc_of_black_view}")
+    bw = None  # declare bw
+    # can use adaptive lightning
+             
+    
+    gray = cv2.cvtColor(transformed_frame, cv2.COLOR_BGR2GRAY)
+    cv2.imshow("gray", gray)
+    
+    if Cons.Image.use_adaptive_lightning:
+        bw = cv2.adaptiveThreshold(
+            gray, 255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY,
+            blockSize=11,  # neighborhood size
+            C=2            # constant subtracted from mean
+            ) 
+    
+    prc_of_black_view = Sht.get_black_pixel_percentage(gray, d=True)
+    
+    print(f"procent of black in wthe whole frame: {round(prc_of_black_view, ndigits=2)}")
     
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
-        letters.append(shit(frame, transformed_frame))  # use network
+        letters.append(shit(frame, bw=bw))  # use network
 
     print("transforming into a dict")
 
@@ -139,12 +157,18 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
 
 
 def play():
-    grid, choose = get_grid()
+    
+    for n in range(Cons.Image.transform_img_times)
+        # save data to a jasn file and compare at the end to output a val
+        grid, choose = get_grid()
+        
+    
+    
     #print(grid)
     #print(choose)
     Img.show_grid(grid, choose)
     
-    for letter in choose:
+    for letter in choose:  # check if all choose letters are existing
         if letter is None:
             return 2
     

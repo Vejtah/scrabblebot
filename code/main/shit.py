@@ -3,7 +3,7 @@ import pytesseract
 import numpy as np
 
 from constans import Constants
-from make_black_values import Data
+from data import Data
 
 Cons = Constants()
 Dta = Data()
@@ -23,6 +23,7 @@ class SHIT:
 
         # Resize to improve OCR accuracy (optional)
         resized = cv2.resize(thresh, (0, 0), fx=2, fy=2, interpolation=cv2.INTER_LINEAR)
+        
         return resized
 
 
@@ -50,24 +51,25 @@ class SHIT:
 
         return None  # in some cases the black % may not work
 
-    def get_black_pixel_percentage(self, gray, gray_scale=True, threshold=30) -> float:
-        # Convert to grayscale if not already
-        if not gray_scale:
-            gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
-        #
+    def get_black_pixel_percentage(self, gray, threshold=30, d=False, bw=None) -> float:
+        
+        # 3. Threshold to pure black | white
+        #    You can pick a fixed threshold (e.g. 127) or use Otsu’s method to choose it automatically:
+                
+        if bw is None:
+            _, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-        # Create a binary mask where black pixels are 1 (below threshold)
-        black_mask = gray < threshold
 
-        # Count black pixels and total pixels
-        black_pixels = np.sum(black_mask)
-        total_pixels = gray.shape[0] * gray.shape[1]
-
-        # Calculate percentage
-        percentage = (black_pixels / total_pixels) * 100
-        return percentage
+        # 4. Compute percentage of black pixels
+        total_pixels = bw.size
+        black_pixels = np.count_nonzero(bw == 0)
+        black_percent = (black_pixels / total_pixels) * 100
+        
+        if d:
+            print(f'Black pixels: {black_pixels}/{total_pixels} ({black_percent:.2f}%)')
+        return black_percent
 
     def is_letter(self, black_val:float)->bool:
-        if black_val < Dta.clac_midpoint(Dta.load()):
+        if black_val < Dta.clac_midpoint(Dta.load(Cons.System.json_path)):
             return True
         return False

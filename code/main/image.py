@@ -134,7 +134,7 @@ class Image:
         while True:
             print("capturing frame")
             ret, frame = self.cap.read()
-
+            #cv2.imshow("frame", frame)
             if not ret:
                 print("Error: Failed to capture frame: ERROR")
                 return
@@ -142,10 +142,12 @@ class Image:
                 print("frame captured: OK")
 
             # Convert the frame to grayscale and readable format
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
+            
             src_points = np.array(Cons.Image.extractAllPoints, dtype=np.float32)
             frame = self.warp_frame_to_rectangle(frame, src_points) # wrap
+            
+            frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            
             return frame # return the cropped frame
 
     
