@@ -2,9 +2,6 @@ import json
 
 from constans import Constants
 
-Cons = Constants()
-json_path = Cons.System.json_path
-
 class Data:
     def __init__(self):
         pass
@@ -30,6 +27,6 @@ class Data:
         nones_smallest_val = nones[0]
 
         midpoint = (letters_highest_val + nones_smallest_val) / 2
-        midpoint += Cons.Image.add_black_prc  # add some extra % to shift the midpoint up
+        midpoint += Constants.Image.add_black_prc  # add some extra % to shift the midpoint up
 
         return midpoint

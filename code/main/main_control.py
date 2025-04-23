@@ -158,9 +158,9 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
 
 def play():
     
-    for n in range(Cons.Image.transform_img_times)
+    #for n in range(Cons.Image.transform_img_times)
         # save data to a jasn file and compare at the end to output a val
-        grid, choose = get_grid()
+    grid, choose = get_grid()
         
     
     
