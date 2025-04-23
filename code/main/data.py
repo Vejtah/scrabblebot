@@ -4,14 +4,8 @@ from constans import Constants
 
 class Data:
     def __init__(self):
-        self.write(  # reset
-            {
-            "grid": [],
-            "choose": []
-            },
-            Constants.Image.compare_grids_json
-        )
-
+        pass
+    
     def write(self, data, path):
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
@@ -20,11 +14,22 @@ class Data:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
-
+    def reset_grids(self):
+        self.write(  # reset
+            {
+            "grid": [],
+            "choose": []
+            },
+            Constants.Image.compare_grids_json
+        )
 
     def add_grid(self, grid, choose):
         data = self.load(Constants.Image.compare_grids_json)
-        data["grid"].append(grid)
+        grid_copy = {}
+        for key, item in grid.items():  # json doesnt accept tupples as keys in dict
+            grid_copy[str(key)] = item
+        
+        data["grid"].append(grid_copy)
         data["choose"].append(choose)
         self.write(data, Constants.Image.compare_grids_json)
 

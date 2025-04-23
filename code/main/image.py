@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import random
 #import time
 
 #from packaging.tags import interpreter_version
@@ -12,18 +13,8 @@ def invert(x, max_val:int):
 
 class Image:
     def __init__(self):
-        self.cameraIndex = 0
+        self.cameraIndex = Constants.System.camera_index
         print(f"opening camera {self.cameraIndex}...")
-        self.cap = cv2.VideoCapture(self.cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
-
-
-        print("checking if cam is opened...")
-        if not self.cap.isOpened():
-            
-            raise SystemError("Error: Cannot access the camera")
-        else:
-            print("cam OK")
-
 
     def order_points(self, pts):
         # Order points: top-left, top-right, bottom-right, bottom-left
@@ -130,11 +121,29 @@ class Image:
     
     def get_transformed_frame(self):
 
-        
+        """
+        the camera needs to be initilaized everytime you take a picture, 
+        if it doesnt do so and only at the start of the program, than if
+        you want to take a new picture it need 3 times until it acctually 
+        refreshes the frame and outputs the acctuall current frame.
+        i have spend 2 hours finding this shit out, so you are welcome :D
+        -Vejtah
+        """
         while True:
             print("capturing frame")
-            ret, frame = self.cap.read()
-            #cv2.imshow("frame", frame)
+            
+            cap = cv2.VideoCapture(self.cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
+
+
+            print("checking if cam is opened...")
+            if not cap.isOpened():
+            
+                raise SystemError("Error: Cannot access the camera")
+            else:
+                print("cam OK")
+            
+            ret, frame = cap.read()
+            #cv2.imshow(str(random.randint(0, 100)), frame)
             if not ret:
                 print("Error: Failed to capture frame: ERROR")
                 return
@@ -172,7 +181,3 @@ class Image:
                 line += f" | {pos}"
             print(line)
         print("")
-    
-
-    def end(self):
-        self.cap.release()

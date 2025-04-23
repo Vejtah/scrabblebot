@@ -27,12 +27,14 @@ Mov.release() #  release the motors
 """play def"""
 
 def shit(frame, bw=None) -> str|None:
+    
     resized = Sht.resize(frame)
     black_prc = Sht.get_black_pixel_percentage(resized, bw=bw)
     
     if Sht.is_letter(black_prc):
-        cv2.imshow("letter", frame)
+        #cv2.imshow("letter", frame)
         letter = Sht.extract_letter(resized, black_prc)
+        print(letter)
         return letter
     return None
     
@@ -62,7 +64,7 @@ def ret() -> None:
 def get_grid():
     print("transforming frame...")
     transformed_frame = Img.get_transformed_frame()
-    cv2.imshow("trans", transformed_frame)
+    #cv2.imshow("trans", transformed_frame)
     print("splitting frame...")
     frames = Img.split_into_grid(transformed_frame, Cons.rows, Cons.cols)
 
@@ -84,7 +86,7 @@ def get_grid():
              
     
     gray = cv2.cvtColor(transformed_frame, cv2.COLOR_BGR2GRAY)
-    cv2.imshow("gray", gray)
+    #cv2.imshow("gray", gray)
     
     if Cons.Image.use_adaptive_lightning:
         bw = cv2.adaptiveThreshold(
@@ -160,21 +162,28 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
 
 def play():
     tried_times = 0
-
+    
     while tried_times != Constants.Image.try_times_to_recognise:
         for _ in range(Constants.Image.transform_img_times):
             # save data to a json file and compare at the end to output a val
             grid, choose = get_grid()
             D.add_grid(grid, choose)
+            
         err_g, err_ch = D.compare_grids()
+        
         if err_g == 0 and err_ch == 0:
+            print("resteting grid")
+            D.reset_grids()
+            Img.show_grid(grid, choose)
             break
-        D.log(f"failed to recognise the grid, i: {tried_times}", t=1)
-        print("trying again...")
+        else:    
+            D.log(f"failed to recognise the grid, i: {tried_times}", t=1)
+            print("trying again...")
+            tried_times += 1
 
     #print(grid)
     #print(choose)
-    Img.show_grid(grid, choose)
+    
     
     for letter in choose:  # check if all choose letters are existing
         if letter is None:
@@ -249,7 +258,6 @@ try:
 finally:
     """end sequence"""
     Mov.release()
-    Img.end()
 
 print("quitting")
 

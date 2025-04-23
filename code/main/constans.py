@@ -33,8 +33,10 @@ class Constants:  #
         keyboardName = "Logitech USB Keyboard"
         json_path_black_vals = "black_values.json"
         rasp_pi_ports = 10  # amt of ports to search for devices
+        camera_index = 0  # find your camera
         log_path = r".log.txt"
         log_time_format = "%d.%m.%y-%H.%M.%S"
+        
 
     # create the map
 
