@@ -15,15 +15,15 @@ class Constants:  #
         # hand
         grabber = 0
 
-        # main
-        s_x = 0
+        # main - set current raw x and y pos to max at start 
         s_x_max = 665
+        s_x = s_x_max
 
         x_start_offset = 10  #
-        x_end_offset = 10
+        x_end_offset = x_start_offset
 
-        s_y = 0
         s_y_max = 760
+        s_y = s_y_max
 
         y_start_offset = 15
         y_end_offset = 5

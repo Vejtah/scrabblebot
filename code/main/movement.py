@@ -53,23 +53,25 @@ class Movement:
             print("move Y unable: ERROR")
             return
 
-
+        
+        # have to move right (x>0) , move x stepper BACKWARD
+        
         if x_move_by >= 0:
-            x_dir = stepper.FORWARD
+            x_dir = stepper.BACKWARD
             x_dir_i = 1
 
         else:
-            x_dir = stepper.BACKWARD
+            x_dir = stepper.FORWARD
             x_move_by *= -1
             x_dir_i = -1
 
 
         if y_move_by >= 0:
-            y_dir = stepper.FORWARD
+            y_dir = stepper.BACKWARD
             y_dir_i = 1
 
         else:
-            y_dir = stepper.BACKWARD
+            y_dir = stepper.FORWARD
             y_move_by *= -1
             y_dir_i = -1
 
