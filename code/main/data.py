@@ -1,10 +1,16 @@
 import json
-
+from datetime import datetime
 from constans import Constants
 
 class Data:
     def __init__(self):
-        pass
+        self.write(  # reset
+            {
+            "grid": [],
+            "choose": []
+            },
+            Constants.Image.compare_grids_json
+        )
 
     def write(self, data, path):
         with open(path, "w", encoding="utf-8") as f:
@@ -14,6 +20,43 @@ class Data:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
+
+
+    def add_grid(self, grid, choose):
+        data = self.load(Constants.Image.compare_grids_json)
+        data["grid"].append(grid)
+        data["choose"].append(choose)
+        self.write(data, Constants.Image.compare_grids_json)
+
+
+    def log(self, *msg, t=0)->None:
+
+        if msg is None:
+            return
+
+        types = {
+            0: "INFO",
+            1: "WARNING",
+            2: "ERROR"
+        }
+
+        now = datetime.now()
+        time = now.strftime(Constants.System.log_time_format)
+        time_skip = " " * len(time)
+        log_msg = f"{time}|{types[t]}: {str(msg[0])}\n"
+
+        for i, m in enumerate(msg):
+            if i == 0:
+                continue  # skip the first message
+            else:
+                log_msg += f"{time_skip}|{types[t]}: {str(m)}\n"
+
+
+        with open(Constants.System.log_path, "a") as l:
+            l.write(
+                log_msg
+            )
+        l.close()
 
     def clac_midpoint(self, data):
         """
@@ -30,3 +73,38 @@ class Data:
         midpoint += Constants.Image.add_black_prc  # add some extra % to shift the midpoint up
 
         return midpoint
+
+    def compare_grids(self) -> {int, int}:
+        data = self.load(Constants.Image.compare_grids_json)
+        grids = data["grid"]
+        chooses = data["choose"]
+
+        len_dicts = len(grids)
+        error_d = 0
+
+        for i in range(len_dicts):
+            for key, item in grids[i].items():
+                for n in range(len_dicts):
+                    if grids[i][key] == grids[n][key]:
+                        pass
+                    else:
+                        self.log(f"k: {key}, grids {i}, {n}: {grids[i][key]}, {grids[n][key]}", t=1)
+                        error_d += 1
+
+        error_ch = 0
+
+        for i, choose in enumerate(chooses):
+            for x in chooses:
+                for n, letter in enumerate(choose):
+                    if letter == x[n]:
+                        pass
+                    else:
+                        error_ch += 1
+                        self.log(f"letter: {letter}, {x[n]}", t=1)
+
+
+        return error_d, error_ch
+
+if __name__ == "__main__":
+    d = Data()
+    d.log("test", "test", t=0)

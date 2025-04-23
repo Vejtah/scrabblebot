@@ -12,6 +12,7 @@ from shit import SHIT
 from keys import Keys
 from image import Image
 from alg import Scrabble
+from data import Data
 
 Mov = Movement()  # movement from Movement
 Cons = Constants()
@@ -19,12 +20,13 @@ Sht = SHIT()
 keys = Keys()
 Img = Image()
 s = Scrabble()
+D = Data()
 
 Mov.release() #  release the motors
 
 """play def"""
 
-def shit(frame, bw=None) -> str:
+def shit(frame, bw=None) -> str|None:
     resized = Sht.resize(frame)
     black_prc = Sht.get_black_pixel_percentage(resized, bw=bw)
     
@@ -95,7 +97,7 @@ def get_grid():
     
     prc_of_black_view = Sht.get_black_pixel_percentage(gray, d=True)
     
-    print(f"procent of black in wthe whole frame: {round(prc_of_black_view, ndigits=2)}")
+    print(f"percent of black in the whole frame: {round(prc_of_black_view, ndigits=2)}")
     
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
@@ -157,13 +159,19 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
 
 
 def play():
-    
-    #for n in range(Cons.Image.transform_img_times)
-        # save data to a jasn file and compare at the end to output a val
-    grid, choose = get_grid()
-        
-    
-    
+    tried_times = 0
+
+    while tried_times != Constants.Image.try_times_to_recognise:
+        for _ in range(Constants.Image.transform_img_times):
+            # save data to a json file and compare at the end to output a val
+            grid, choose = get_grid()
+            D.add_grid(grid, choose)
+        err_g, err_ch = D.compare_grids()
+        if err_g == 0 and err_ch == 0:
+            break
+        D.log(f"failed to recognise the grid, i: {tried_times}", t=1)
+        print("trying again...")
+
     #print(grid)
     #print(choose)
     Img.show_grid(grid, choose)
@@ -208,7 +216,7 @@ try:
                 break
                 
             elif rc == 2:
-                print("not all choose spaces filled: ERORR")
+                print("not all choose spaces filled: ERROR")
                 
                 
                 
