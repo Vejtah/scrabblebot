@@ -34,7 +34,8 @@ def shit(frame, bw=None) -> str|None:
     if Sht.is_letter(black_prc):
         #cv2.imshow("letter", frame)
         letter = Sht.extract_letter(resized, black_prc)
-        print(letter)
+        #print(letter)
+        D.add_black_letter_val(black_prc)
         return letter
     return None
     
@@ -97,8 +98,11 @@ def get_grid():
             C=2            # constant subtracted from mean
             ) 
     
-    prc_of_black_view = Sht.get_black_pixel_percentage(gray, d=True)
+    prc_of_black_view = Sht.get_black_pixel_percentage(gray, d=False)
     
+    mid = D.clac_midpoint(D.load(Cons.System.json_path_black_vals))
+    
+    print(f"mid point: {round(mid, ndigits=2)}")
     print(f"percent of black in the whole frame: {round(prc_of_black_view, ndigits=2)}")
     
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar

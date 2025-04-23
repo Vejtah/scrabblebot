@@ -32,7 +32,12 @@ class Data:
         data["grid"].append(grid_copy)
         data["choose"].append(choose)
         self.write(data, Constants.Image.compare_grids_json)
-
+    
+    def add_black_letter_val(self, val:float)->None:
+        data = self.load(Constants.System.json_path_black_vals)
+        data["letters"].append(val)
+        
+        self.write(data, Constants.System.json_path_black_vals)
 
     def log(self, *msg, t=0)->None:
 
@@ -76,7 +81,7 @@ class Data:
 
         midpoint = (letters_highest_val + nones_smallest_val) / 2
         midpoint += Constants.Image.add_black_prc  # add some extra % to shift the midpoint up
-
+        
         return midpoint
 
     def compare_grids(self) -> {int, int}:

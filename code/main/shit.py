@@ -70,6 +70,8 @@ class SHIT:
         return black_percent
 
     def is_letter(self, black_val:float)->bool:
-        if black_val < Dta.clac_midpoint(Dta.load(Cons.System.json_path_black_vals)):
+        mid_point = Dta.clac_midpoint(Dta.load(Cons.System.json_path_black_vals))
+        
+        if black_val < mid_point:
             return True
         return False

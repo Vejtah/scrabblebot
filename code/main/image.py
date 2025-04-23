@@ -173,7 +173,9 @@ class Image:
             print(f"choose:{line}")
 
         for y in range(rows):
+            y = invert(y, rows)
             line = ""
+            
             for x in range(cols):
                 pos = grid[x, y]
                 if pos is None:  # replace None with _
