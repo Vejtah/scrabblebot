@@ -26,7 +26,7 @@ file to test the code in different ways
 """
 
 def mam_ret(x, y):
-    Mov.move(-x, -y, poss_check=False)
+    Mov.move(-x + 5, -y, poss_check=False)
 
 
 if __name__ == "__main__":
