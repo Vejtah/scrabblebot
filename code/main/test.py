@@ -35,7 +35,7 @@ if __name__ == "__main__":
         #Mov.open()
         #Mov.move(-20, 0, poss_check=False)
 
-        mam_ret(0, 0)
+        mam_ret(5, 0)
 
         steps = int(input("steps"))
 
