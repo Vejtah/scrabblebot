@@ -26,12 +26,14 @@ file to test the code in different ways
 """
 
 def mam_ret(x, y):
-    Mov.move(-x + 5, -y, poss_check=False)
+    Mov.move(-x - 5, -y, poss_check=False)
 
 
 if __name__ == "__main__":
     try:
         #Mov.open()
+        mam_ret(0, 0)
+
         steps = int(input("steps"))
 
         Mov.move(-steps, 0)
