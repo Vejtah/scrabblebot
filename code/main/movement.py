@@ -7,15 +7,20 @@ import busio # type: ignore
 from adafruit_pca9685 import PCA9685 # type: ignore
 from adafruit_motor import servo # type: ignore
 
-from constans import Constants
+from constants import Constants
 from keys import Keys
 
-Cons = Constants()
+"""
+crate a object self.Constants to save stepper positions
+"""
+
 Key_c = Keys()
 
 
 class Movement:
     def __init__(self):
+
+        self.Cons = Constants()
         
         self.kit = MotorKit(i2c=board.I2C())
 
@@ -33,29 +38,29 @@ class Movement:
         self.hand.angle = 30
     def close(self):
         self.hand.angle = 0
-    
+
     def release(self) -> None:
         self.s_x.release() # release to prevent overheat
         self.s_y.release()
-    
+
     def move(self, x_move_by: int, y_move_by: int):
 
-        if 0 <= (Cons.Pos.s_x + x_move_by) <= Cons.Pos.s_x_max:
+        if 0 <= (self.Cons.Pos.s_x + x_move_by) <= self.Cons.Pos.s_x_max:
             print("move X pos: OK")
         else:
             print("move X unable: ERROR")
             return
 
 
-        if 0 <= (Cons.Pos.s_y + y_move_by) <= Cons.Pos.s_y_max:
+        if 0 <= (self.Cons.Pos.s_y + y_move_by) <= self.Cons.Pos.s_y_max:
             print("move Y pos: OK")
         else:
             print("move Y unable: ERROR")
             return
 
-        
+
         # have to move right (x>0) , move x stepper BACKWARD
-        
+
         if x_move_by >= 0:
             x_dir = stepper.BACKWARD
             x_dir_i = 1
@@ -80,7 +85,7 @@ class Movement:
 
         # combine x and y movement:
         while x_move_by >= 1 and y_move_by >= 1:
-            
+
             self.s_x.onestep(direction=x_dir)
             time.sleep(self.sleep / 2) # wait 1/2 of waiting cycle
 
@@ -92,12 +97,12 @@ class Movement:
             x_move_by -= 1
             y_move_by -= 1
 
-            Cons.Pos.s_x += x_dir_i # update location +1 if pos else -1
-            Cons.Pos.s_y += y_dir_i
+            self.Cons.Pos.s_x += x_dir_i # update location +1 if pos else -1
+            self.Cons.Pos.s_y += y_dir_i
 
             time.sleep(self.sleep / 2)  # finsh the waiting cycle
-        
-        #  move the rest 
+
+        #  move the rest
         if x_move_by >= y_move_by:
             x_left = x_move_by - y_move_by
 
@@ -106,7 +111,7 @@ class Movement:
 
                 x_progress.update(1)
 
-                Cons.Pos.s_x += x_dir_i
+                self.Cons.Pos.s_x += x_dir_i
 
                 time.sleep(self.sleep)
 
@@ -118,57 +123,63 @@ class Movement:
 
                 y_progress.update(1)
 
-                Cons.Pos.s_y += y_dir_i
+                self.Cons.Pos.s_y += y_dir_i
 
                 time.sleep(self.sleep)
-        
 
-                
+
+
 
     def move_to(self, target_x: int, target_y: int) -> {int | float, int | float}:
-        x_move_by = target_x - Cons.Pos.s_x
-        y_move_by = target_y - Cons.Pos.s_y
+        x_move_by = target_x - self.Cons.Pos.s_x
+        y_move_by = target_y - self.Cons.Pos.s_y
 
         # check if move possible
 
-        x_next = Cons.Pos.s_x + x_move_by  # maybe -?? but i dont think so
-        y_next = Cons.Pos.s_y + y_move_by
+        x_next = self.Cons.Pos.s_x + x_move_by  # maybe -?? but i dont think so
+        y_next = self.Cons.Pos.s_y + y_move_by
 
-        if 0 <= x_next <= Cons.Pos.s_x_max and 0 <= y_next <= Cons.Pos.s_y_max:
+        if 0 <= x_next <= self.Cons.Pos.s_x_max and 0 <= y_next <= self.Cons.Pos.s_y_max:
             print("move possible, proceeding...")
         else:
             print("next move called in minus: ERROR")
             print("aborting...")
             return  # exit move function
-        
-        return x_move_by, y_move_by
-        
+
+        self.move(x_move_by, y_move_by)
 
 
     def move_to_piece(self, x: int, y: int):
         #x
-        move_range_x = Cons.Pos.s_x_max - Cons.Pos.x_start_offset - Cons.Pos.x_end_offset
-        piece_x = move_range_x / Cons.cols #cols = 15  - calculate the steps rq for one tile
+        move_range_x = self.Cons.Pos.s_x_max - self.Cons.Pos.x_start_offset - self.Cons.Pos.x_end_offset
+        piece_x = move_range_x / self.Cons.cols #cols = 15  - calculate the steps rq for one tile
 
-        move_range_y = Cons.Pos.s_y_max - Cons.Pos.y_start_offset - Cons.Pos.y_end_offset
-        piece_y = move_range_y / Cons.rows #rows = 12 ( 10 + 2)
+        move_range_y = self.Cons.Pos.s_y_max - self.Cons.Pos.y_start_offset - self.Cons.Pos.y_end_offset
+        piece_y = move_range_y / self.Cons.rows #rows = 12 ( 10 + 2)
 
         # add starting offset
 
-        # reverse the x and y 
+        # reverse the x and y
 
-        
 
-        piece_x_pos = (piece_x * (Cons.cols - x)) + Cons.Pos.x_start_offset
+
+        piece_x_pos = (piece_x * (self.Cons.cols - x)) + self.Cons.Pos.x_start_offset
 
         piece_x_pos += piece_x / 2  # add 1/2 of the tile to be in the middle
 
-        piece_y_pos = round((piece_y * (Cons.rows - y)) + Cons.Pos.y_start_offset)
+        piece_y_pos = round((piece_y * (self.Cons.rows - y)) + self.Cons.Pos.y_start_offset)
 
         piece_y_pos += piece_y / 2 # add 1/2 of the tile to be in the middle
 
-        return round(piece_x_pos), round(piece_y_pos)
+        self.move_to(round(piece_x_pos), round(piece_y_pos))
 
+    def ret(self) -> None:
+        self.move_to_piece(14, 10)
+        time.sleep(self.sleep)
+        self.move_to(0, 0)
+        self.move(-5, -5)
+        self.Cons.s_x, self.Cons.s_y = 0, 0  # reset the x and y var
+        # Mov.open() # open the hand
 
     def manual_movement(self, key: int, amt=5):
 
@@ -189,12 +200,12 @@ class Movement:
         elif action == 2:
             self.move(0, amt)
             print("moving y+")
-        elif action == 3: 
+        elif action == 3:
             self.move(0, amt * -1)
             print("moving y-")
 
         print("current X Y pos:")
-        print(f"{Cons.Pos.s_x} | {Cons.Pos.s_y}")
+        print(f"{self.Cons.Pos.s_x} | {self.Cons.Pos.s_y}")
 
 
     def manual(self):
@@ -202,7 +213,7 @@ class Movement:
         print("")
         print("select step: (int)")
         step = Key_c.numpad()
-        
+
         print(f"step: {step}")
         print("move with keys...")
 
@@ -210,6 +221,6 @@ class Movement:
         while key != Key_c.AllKeys.KEY_QUIT:
             key = Key_c.scan_keys()
             if key in Key_c.MANUAL_MOVEMENT:
-                
+
                 self.manual_movement(key, amt=step)
         print("exiting manual...")

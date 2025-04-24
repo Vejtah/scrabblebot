@@ -107,6 +107,35 @@ def generate_words_from_sequence(board: dict, start: tuple, direction: tuple, le
             valid_moves.append((word, direction, start, placed_positions))
     return valid_moves
 
+def eval_moves(moves: list) -> tuple:
+    """
+    Evaluate moves by their Scrabble score and print a summary.
+
+    Returns a tuple of:
+      (best_move, move_scores)
+    where best_move is the move tuple with the highest score and move_scores is a dict mapping word to score.
+    """
+    best_move = None
+    best_score = 0
+    move_scores = {}
+    for move in moves:
+        word = move[0]
+        score = score_word(word)
+        move_scores[word] = score
+        if score > best_score:
+            best_score = score
+            best_move = move
+
+    # Display a simple score chart.
+    print("Move Scores:")
+    for word, score in sorted(move_scores.items(), key=lambda x: x[1], reverse=True):
+        bar = "=" * (score // 2)  # simple bar proportional to score
+        print(f"{word:<10} | {score:<3} | {bar}")
+    print(best_move)
+    print(move_scores)
+    return best_move, move_scores
+
+
 class Scrabble:
     def __init__(self, rows: int = 10, cols: int = 15, amt_letters: int = 7):
         self.rows = rows
@@ -143,30 +172,3 @@ class Scrabble:
         return moves_clean
 
         
-    def eval_moves(self, moves: list) -> tuple:
-        """
-        Evaluate moves by their Scrabble score and print a summary.
-        
-        Returns a tuple of:
-          (best_move, move_scores)
-        where best_move is the move tuple with the highest score and move_scores is a dict mapping word to score.
-        """
-        best_move = None
-        best_score = 0
-        move_scores = {}
-        for move in moves:
-            word = move[0]
-            score = score_word(word)
-            move_scores[word] = score
-            if score > best_score:
-                best_score = score
-                best_move = move
-
-        # Display a simple score chart.
-        print("Move Scores:")
-        for word, score in sorted(move_scores.items(), key=lambda x: x[1], reverse=True):
-            bar = "=" * (score // 2)  # simple bar proportional to score
-            print(f"{word:<10} | {score:<3} | {bar}")
-        print(best_move)
-        print(move_scores)
-        return best_move, move_scores
