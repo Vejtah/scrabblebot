@@ -171,7 +171,8 @@ def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
     x_line = f"xx:"
 
     for x in range(cols):
-        line += f" | {x}"
+        x_line += f" | {x}"
+    print(x_line)
 
     for y in range(rows):
         if i:
