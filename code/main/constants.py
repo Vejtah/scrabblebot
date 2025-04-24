@@ -26,7 +26,7 @@ class Constants:  #
         s_y = s_y_max
 
         y_start_offset = 140
-        y_end_offset = 5
+        y_end_offset = 25
 
     class System:
         root_dir = "/home/malina/sb/scrabblebot/code/main/"
