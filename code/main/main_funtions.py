@@ -163,8 +163,16 @@ def play(played_moves):
 
         err_g, err_ch = d.compare_grids()
 
+        letters_amt = 0
+        for letter in choose:  # check if all choose letters are existing
+            if letter is not None:
+                 letters_amt += 1
 
-        if err_g == 0 and err_ch == 0:
+        can = False
+        if letters_amt == 7:
+            can = True
+
+        if err_g == 0 and err_ch == 0 and can:
             print("resetting grid")
             d.reset_grids()
 
