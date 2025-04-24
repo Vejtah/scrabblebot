@@ -28,6 +28,7 @@ file to test the code in different ways
 if __name__ == "__main__":
     try:
         Mov.open()
-        Mov.move(-50, -50)
+        Mov.move_to_piece(0, 0)
+    
     finally:
         Mov.release()
