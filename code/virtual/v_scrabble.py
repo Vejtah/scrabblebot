@@ -167,7 +167,7 @@ def remove(pos) -> None:
 
 
 
-def find_click(float: x, float: y) -> int | int:
+def find_click(x:float, y:float) -> int | int:
     current_x = 0
     current_y = 0
 

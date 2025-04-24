@@ -136,6 +136,14 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
         Mov.ret()  # return to start and calib
 
 
+def plot_word(move_tupple: tuple, grid:dict[]) -> None:
+
+    letters_dict = move_tupple[3]
+
+    for (x, y), letter in letters_dict.items():
+        grid[(x, y)] = letter.upper()  # add the letter to the main dict
+
+
 def play(played_moves):
     tried_times = 0
 
@@ -172,10 +180,15 @@ def play(played_moves):
             return 2
 
     word = best_word(grid, choose, played_moves)
+    
+    plot_word(word, grid)
+
+    img.show_grid(grid)
 
     if word == 1:
         return 1
 
     played_moves.played_moves.append(word[0])  # add word to played moves
-    build_word(word, choose)
+    #build_word(word, choose)
+
     return 0
