@@ -126,7 +126,7 @@ def get_transformed_frame():
     cameraIndex = Constants.System.camera_index
 
     while True:
-        print("capturing frame")
+        print("capturing frame...")
         
         cap = cv2.VideoCapture(cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
 

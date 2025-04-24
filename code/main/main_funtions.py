@@ -1,6 +1,7 @@
 import time
 #from wsgiref.util import request_uri
 import cv2
+from setuptools.unicode_utils import try_encode
 #from pipenv.pep508checker import implementation_name
 from tqdm import tqdm
 
@@ -37,7 +38,7 @@ def shit(frame, bw=None) -> str | None:
 
 
 def get_grid():
-    print("transforming frame...")
+    print("->Frame")
     transformed_frame = img.get_transformed_frame()
     # cv2.imshow("trans", transformed_frame)
     print("splitting frame...")
@@ -53,7 +54,7 @@ def get_grid():
         print("Error in split or select: ERROR")
         return  # add a return point IDK
 
-    print("transforming frames to string...")
+    print("->transforming frames to string...")
     letters = []
 
     bw = None  # declare bw
@@ -75,13 +76,13 @@ def get_grid():
 
     mid = d.clac_midpoint(d.load(Constants.System.json_path_black_vals))
 
-    print(f"mid point: {round(mid, ndigits=2)}")
-    print(f"percent of black in the whole frame: {round(prc_of_black_view, ndigits=2)}")
-
+    print(f"->mid point: {round(mid, ndigits=2)}")
+    print(f"->percent of black in the whole frame: {round(prc_of_black_view, ndigits=2)}")
+    print("")
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
         letters.append(shit(frame, bw=bw))  # use network
-
+    print("")
     print("transforming into a dict")
 
     choose, grid = img.transform_list(letters)
@@ -136,9 +137,9 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
         Mov.ret()  # return to start and calib
 
 
-def plot_word(move_tupple: tuple, grid:dict) -> None:
+def plot_word(move_tuple: tuple, grid:dict) -> None:
 
-    letters_dict = move_tupple[3]
+    letters_dict = move_tuple[3]
 
     for (x, y), letter in letters_dict.items():
         grid[(x, y)] = letter.upper()  # add the letter to the main dict
@@ -164,14 +165,20 @@ def play(played_moves):
         if err_g == 0 and err_ch == 0:
             print("resetting grid")
             d.reset_grids()
+
             img.show_grid(grid, choose)
             break
 
         else:
             d.log(f"failed to recognise the grid, i: {tried_times}", t=1)
+            d.reset_grids() # reset the json with grids
             print("trying again...")
             tried_times += 1
 
+
+    if tried_times >= Constants.Image.try_times_to_recognise:
+        d.log(f"failed to rec the grid {Constants.Image.try_times_to_recognise} times giving up", t=2)
+        print("giving up...")
     # print(grid)
     # print(choose)
 
@@ -180,7 +187,9 @@ def play(played_moves):
             return 2
 
     word = best_word(grid, choose, played_moves)
-
+    print("word")
+    d.log("word:", word)
+    print(word)
     plot_word(word, grid)
 
     img.show_grid(grid)
