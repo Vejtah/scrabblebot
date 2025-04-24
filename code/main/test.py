@@ -25,15 +25,24 @@ Mov.release() #  release the motors
 file to test the code in different ways
 """
 
+def mam_ret(x, y):
+    Mov.move(-x, -y, poss_check=False)
+
 
 if __name__ == "__main__":
     try:
         #Mov.open()
-        Mov.ret()
+        steps = int(input("steps"))
 
-        Mov.move_to(0, 0)
+        Mov.move(-steps, 0)
+        time.sleep(3)
+        mam_ret(-steps, 0)
+
+        #Mov.ret()
+
+        #Mov.move_to(0, 0)
         Mov.close()
-        Mov.ret()
+        #Mov.ret()
 
     finally:
         time.sleep(4)
