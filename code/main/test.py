@@ -28,11 +28,13 @@ file to test the code in different ways
 
 if __name__ == "__main__":
     try:
-        Mov.open()
+        #Mov.open()
         Mov.ret()
+
         Mov.move_to(0, 0)
         Mov.close()
         Mov.ret()
 
     finally:
+        time.sleep(4)
         Mov.release()
