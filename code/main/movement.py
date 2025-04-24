@@ -150,7 +150,7 @@ class Movement:
         self.move(x_move_by, y_move_by)
 
 
-    def move_to_piece(self, x: int, y: int):
+    def move_to_piece(self, x: float, y: float):
         #x
         move_range_x = self.Cons.Pos.s_x_max - self.Cons.Pos.x_start_offset - self.Cons.Pos.x_end_offset
         piece_x = move_range_x / self.Cons.cols #cols = 15  - calculate the steps rq for one tile

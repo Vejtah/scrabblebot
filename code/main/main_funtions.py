@@ -111,7 +111,7 @@ def grab_letter(letter_pos) -> None:
     Mov.move_to_piece(letter_x_pos, 10)
     time.sleep(0.5)
 
-    Mov.move_to_piece(letter_x_pos, 11)  # slide on to the tile
+    Mov.move_to_piece(letter_x_pos, 11.5)  # slide on to the tile
 
     Mov.close()
     time.sleep(0.5)
