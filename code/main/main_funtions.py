@@ -109,6 +109,8 @@ def grab_letter(letter_pos) -> None:
     letter_x_pos = letter_pos * 2  # gaps between holders
 
     Mov.move_to_piece(letter_x_pos, 10)
+
+    Mov.open()
     time.sleep(0.5)
 
     Mov.move_to_piece(letter_x_pos, 11.5)  # slide on to the tile

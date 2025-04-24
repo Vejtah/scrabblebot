@@ -183,7 +183,7 @@ class Movement:
             time.sleep(self.sleep)
 
         self.move_to(Constants.Pos.s_x_max, Constants.Pos.s_y_max) #  move to right top corner
-        self.move(5, 5, poss_check=False)  # disable check if possible move
+        self.move(10, 10, poss_check=False)  # disable check if possible move
         self.Cons.s_x, self.Cons.s_y = Constants.Pos.s_x_max, Constants.Pos.s_y_max  # reset the x and y var
         self.open() # open the hand
 
