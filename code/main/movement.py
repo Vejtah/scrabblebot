@@ -26,7 +26,7 @@ class Movement:
 
         self.s_x = self.kit.stepper1
         self.s_y = self.kit.stepper2
-        self.sleep = .03
+        self.sleep = .04
 
         self.i2c = busio.I2C(board.SCL, board.SDA)
         self.pca = PCA9685(self.i2c)

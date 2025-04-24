@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
         steps = int(input("steps"))
 
-        Mov.move(0, -steps)
+        Mov.move(0, -steps, poss_check=False)
         time.sleep(3)
         mam_ret(0, steps)
 

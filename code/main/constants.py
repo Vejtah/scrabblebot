@@ -19,13 +19,13 @@ class Constants:  #
         s_x_max = 665
         s_x = s_x_max
 
-        x_start_offset = 10  #
+        x_start_offset = 35  #
         x_end_offset = x_start_offset
 
         s_y_max = 760
         s_y = s_y_max
 
-        y_start_offset = 15
+        y_start_offset = 140
         y_end_offset = 5
 
     class System:
