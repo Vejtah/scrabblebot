@@ -159,7 +159,7 @@ class Movement:
         piece_y = move_range_y / self.Cons.rows #rows = 12 ( 10 + 2)
 
         # add starting offset
-        
+
 
         piece_x_pos = (piece_x * x) + self.Cons.Pos.x_start_offset
 
@@ -172,12 +172,20 @@ class Movement:
         self.move_to(round(piece_x_pos), round(piece_y_pos))
 
     def ret(self) -> None:
-        self.move_to_piece(14, 10)
-        time.sleep(self.sleep)
+
+        # check if the hand is already in the top right corner
+        if (self.Cons.Pos.s_x > Constants.Pos.s_x_max - Constants.Pos.x_start_offset and
+            self.Cons.Pos.s_y > Constants.Pos.s_y_max - Constants.Pos.y_start_offset):
+            pass
+
+        else:
+            self.move_to_piece(14, 10)
+            time.sleep(self.sleep)
+
         self.move_to(Constants.Pos.s_x_max, Constants.Pos.s_y_max) #  move to right top corner
         self.move(5, 5, poss_check=False)  # disable check if possible move
         self.Cons.s_x, self.Cons.s_y = Constants.Pos.s_x_max, Constants.Pos.s_y_max  # reset the x and y var
-        # Mov.open() # open the hand
+        self.open() # open the hand
 
     def manual_movement(self, key: int, amt=5):
 
