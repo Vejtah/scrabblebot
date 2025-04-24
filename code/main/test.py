@@ -16,7 +16,7 @@ from constants import Constants
 Mov = Movement()
 s = alg.Scrabble()
 
-import main_funtions
+import main_funtions as mf
 #F = Functions()
 
 Mov.release() #  release the motors
@@ -35,20 +35,8 @@ if __name__ == "__main__":
     try:
         #Mov.open()
         #Mov.move(-20, 0, poss_check=False)
+        mf.grab_letter(0)
 
-        mam_ret(0, 0)
-
-        steps = int(input("steps"))
-
-        Mov.move(0, -steps, poss_check=False)
-        time.sleep(3)
-        mam_ret(0, steps)
-
-        #Mov.ret()
-
-        #Mov.move_to(0, 0)
-        Mov.close()
-        #Mov.ret()
         time.sleep(4)
         Mov.release()
 
