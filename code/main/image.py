@@ -168,10 +168,15 @@ def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
     if len(choose) >= 1:
         print(f"choose:{line}")
 
+    x_line = f"xx:"
+
+    for x in range(cols):
+        line += f" | {x}"
+
     for y in range(rows):
         if i:
             y = invert(y, rows)
-        line = ""
+        line = f"{y:>2}:"
         
         for x in range(cols):
             pos = grid[x, y]
