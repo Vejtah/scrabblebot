@@ -136,7 +136,7 @@ def build_word(move_tuple, choose: list) -> str | None:  # depending on if the b
         Mov.ret()  # return to start and calib
 
 
-def plot_word(move_tupple: tuple, grid:dict[]) -> None:
+def plot_word(move_tupple: tuple, grid:dict) -> None:
 
     letters_dict = move_tupple[3]
 
@@ -180,7 +180,7 @@ def play(played_moves):
             return 2
 
     word = best_word(grid, choose, played_moves)
-    
+
     plot_word(word, grid)
 
     img.show_grid(grid)
