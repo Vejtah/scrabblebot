@@ -197,7 +197,7 @@ def play(played_moves):
     if word == 1:
         return 1
 
-    played_moves.played_moves.append(word[0])  # add word to played moves
+    played_moves.append(word[0])  # add word to played moves
     #build_word(word, choose)
 
     return 0
