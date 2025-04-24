@@ -15,7 +15,7 @@ crate a object self.Constants to save stepper positions
 """
 
 Key_c = Keys()
-
+import image
 
 class Movement:
     def __init__(self):
@@ -159,16 +159,13 @@ class Movement:
         piece_y = move_range_y / self.Cons.rows #rows = 12 ( 10 + 2)
 
         # add starting offset
+        
 
-        # reverse the x and y
-
-
-
-        piece_x_pos = (piece_x * (self.Cons.cols - x)) + self.Cons.Pos.x_start_offset
+        piece_x_pos = (piece_x * x) + self.Cons.Pos.x_start_offset
 
         piece_x_pos += piece_x / 2  # add 1/2 of the tile to be in the middle
 
-        piece_y_pos = round((piece_y * (self.Cons.rows - y)) + self.Cons.Pos.y_start_offset)
+        piece_y_pos = (piece_y * y) + self.Cons.Pos.y_start_offset
 
         piece_y_pos += piece_y / 2 # add 1/2 of the tile to be in the middle
 
