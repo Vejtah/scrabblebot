@@ -156,7 +156,7 @@ def get_transformed_frame():
         return frame # return the cropped frame
 
 
-def show_grid(grid: dict, choose=None, rows=10, cols=15):
+def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
 
     if choose is None:
         choose = []
@@ -169,7 +169,8 @@ def show_grid(grid: dict, choose=None, rows=10, cols=15):
         print(f"choose:{line}")
 
     for y in range(rows):
-        y = invert(y, rows)
+        if i:
+            y = invert(y, rows)
         line = ""
         
         for x in range(cols):

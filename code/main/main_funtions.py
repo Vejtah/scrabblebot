@@ -192,7 +192,8 @@ def play(played_moves):
     print(word)
     plot_word(word, grid)
 
-    img.show_grid(grid)
+    img.show_grid(grid, i=True)
+    img.show_grid(grid, i=False)
 
     if word == 1:
         return 1
