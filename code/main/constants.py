@@ -50,7 +50,7 @@ class Constants:  #
         add_black_prc = 0  # use if the letter recognition isn't working properly
         extractAllPoints = [(64, 87), (493, 68), (508, 426), (76, 443)]
         use_adaptive_lightning = False
-        transform_img_times = 2
+        transform_img_times = 1
         compare_grids_json = r"grid_choose.json"
         try_times_to_recognise = 3
 
