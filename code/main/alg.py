@@ -5,12 +5,28 @@ import time
 # Set up the dictionary for word validation.
 
 from dictonary import UsEn
-
+from constants import Constants
 d = UsEn()
 
 def check_word(word: str) -> bool:
     """Return True if word has length>=2 and is in the dictionary."""
     return len(word) >= 2 and d.check(word)
+
+
+def to_internal(bottom_coord: tuple[int, int]) -> tuple[int, int]:
+    """Map (x, y) from bottom-left to top-left."""
+    x, y_bottom = bottom_coord
+    y_internal  = Constants.rows - 1 - y_bottom
+    return x, y_internal
+
+def reverse_grid(grid):
+        # Build the internal board expected by the algorithm
+
+    internal_board = {
+        to_internal(pos): letter for pos, letter in grid.items()
+    }
+
+    return internal_board
 
 def score_word(word: str) -> int:
     """Compute a simple Scrabble score for a word (no bonus squares)."""

@@ -91,7 +91,9 @@ def get_grid():
 
 def best_word(grid, choose, played_moves):
 
-    best_move, _ = alg.eval_moves(s.all_possible_moves(grid, choose, played_moves))
+    rev_grid = alg.reverse_grid(grid)
+
+    best_move, _ = alg.eval_moves(s.all_possible_moves(rev_grid, choose, played_moves))
 
     # detect if there aren't any available words
 

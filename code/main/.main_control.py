@@ -5,13 +5,13 @@
 from movement import Movement
 from keys import Keys
 
-from alg import Scrabble
+import alg
 
 import main_funtions as mf
 
 Mov = Movement()  # movement from Movement
 keys = Keys()
-s = Scrabble()
+s = alg.Scrabble()
 
 played_moves = []
 
@@ -32,7 +32,7 @@ try:
     key = ""           
     while key != keys.AllKeys.KEY_QUIT:
 
-        print(f"press keys to continue, for help press {keys.AllKeys.KEY_HELP}...")
+        print(f"press {keys.AllKeys.KEY_PLAY} to play, for help press {keys.AllKeys.KEY_HELP}...")
         key = keys.scan_keys()
 
         if key == keys.AllKeys.KEY_PLAY:
