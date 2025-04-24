@@ -26,8 +26,9 @@ file to test the code in different ways
 """
 
 def mam_ret(x, y):
-    Mov.move(x + 5
-             , -y, poss_check=False)
+    Mov.move(x + 0,
+             y + 5,
+             poss_check=False)
 
 
 if __name__ == "__main__":
@@ -35,13 +36,13 @@ if __name__ == "__main__":
         #Mov.open()
         #Mov.move(-20, 0, poss_check=False)
 
-        mam_ret(5, 0)
+        mam_ret(0, 0)
 
         steps = int(input("steps"))
 
-        Mov.move(-steps, 0)
+        Mov.move(0, -steps)
         time.sleep(3)
-        mam_ret(steps, 0)
+        mam_ret(0, steps)
 
         #Mov.ret()
 
