@@ -168,7 +168,7 @@ def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
     if len(choose) >= 1:
         print(f"choose:{line}")
 
-    x_line = f"xx:"
+    x_line = f"xx: "
 
     for x in range(cols):
         x_line += f"| {x:<2}"
