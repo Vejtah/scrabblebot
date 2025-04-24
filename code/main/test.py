@@ -27,7 +27,7 @@ file to test the code in different ways
 
 def mam_ret(x, y):
     Mov.move(x + 0,
-             y + 5,
+             y - 5,
              poss_check=False)
 
 
