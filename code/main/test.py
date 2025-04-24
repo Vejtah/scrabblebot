@@ -35,6 +35,7 @@ if __name__ == "__main__":
     try:
         #Mov.open()
         #Mov.move(-20, 0, poss_check=False)
+        Mov.ret()
         mf.grab_letter(0)
 
         time.sleep(4)
