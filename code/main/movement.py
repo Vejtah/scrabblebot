@@ -43,20 +43,21 @@ class Movement:
         self.s_x.release() # release to prevent overheat
         self.s_y.release()
 
-    def move(self, x_move_by: int, y_move_by: int):
+    def move(self, x_move_by: int, y_move_by: int, poss_check=True):
 
-        if 0 <= (self.Cons.Pos.s_x + x_move_by) <= self.Cons.Pos.s_x_max:
-            print("move X pos: OK")
-        else:
-            print("move X unable: ERROR")
-            return
+        if poss_check:
+            if 0 <= (self.Cons.Pos.s_x + x_move_by) <= self.Cons.Pos.s_x_max:
+                print("move X pos: OK")
+            else:
+                print("move X unable: ERROR")
+                return
 
 
-        if 0 <= (self.Cons.Pos.s_y + y_move_by) <= self.Cons.Pos.s_y_max:
-            print("move Y pos: OK")
-        else:
-            print("move Y unable: ERROR")
-            return
+            if 0 <= (self.Cons.Pos.s_y + y_move_by) <= self.Cons.Pos.s_y_max:
+                print("move Y pos: OK")
+            else:
+                print("move Y unable: ERROR")
+                return
 
 
         # have to move right (x>0) , move x stepper BACKWARD
@@ -176,9 +177,9 @@ class Movement:
     def ret(self) -> None:
         self.move_to_piece(14, 10)
         time.sleep(self.sleep)
-        self.move_to(0, 0)
-        self.move(-5, -5)
-        self.Cons.s_x, self.Cons.s_y = 0, 0  # reset the x and y var
+        self.move_to(Constants.Pos.s_x_max, Constants.Pos.s_y_max) #  move to right top corner
+        self.move(5, 5, poss_check=False)  # disable check if possible move
+        self.Cons.s_x, self.Cons.s_y = Constants.Pos.s_x_max, Constants.Pos.s_y_max  # reset the x and y var
         # Mov.open() # open the hand
 
     def manual_movement(self, key: int, amt=5):
