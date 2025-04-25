@@ -8,6 +8,7 @@ from tqdm import tqdm
 import shit as sh
 import data as d
 import image as img
+import cam_mark
 
 import alg
 from movement import Movement
@@ -39,7 +40,12 @@ def shit(frame, bw=None) -> str | None:
 
 def get_grid():
     print("->Frame")
-    transformed_frame = img.get_transformed_frame()
+    transformed_frame, original_frame = img.get_transformed_frame()
+
+    cv2.imshow("cropped")
+
+    cam_mark.get_hand_mark(original_frame)
+
     # cv2.imshow("trans", transformed_frame)
     print("splitting frame...")
     frames = img.split_into_grid(transformed_frame, Constants.rows, Constants.cols)

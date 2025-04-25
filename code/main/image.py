@@ -138,7 +138,7 @@ def get_transformed_frame():
         else:
             print("cam OK")
         
-        ret, frame = cap.read()
+        ret, o_frame = cap.read()
         #cv2.imshow(str(random.randint(0, 100)), frame)
         if not ret:
             print("Error: Failed to capture frame: ERROR")
@@ -149,11 +149,11 @@ def get_transformed_frame():
         # Convert the frame to grayscale and readable format
         
         src_points = np.array(Constants.Image.extractAllPoints, dtype=np.float32)
-        frame = warp_frame_to_rectangle(frame, src_points) # wrap
+        frame = warp_frame_to_rectangle(o_frame, src_points) # wrap
         
         frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
         
-        return frame # return the cropped frame
+        return frame, o_frame # return the cropped frame and original frame
 
 
 def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
