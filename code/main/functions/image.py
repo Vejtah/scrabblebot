@@ -4,7 +4,7 @@ import cv2
 #from packaging.tags import interpreter_version
 
 
-from ..config import Constants
+from configs.config import Constants
 
 def invert(x, max_val:int):
     return (max_val - 1) - x

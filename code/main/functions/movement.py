@@ -7,7 +7,7 @@ import busio # type: ignore
 from adafruit_pca9685 import PCA9685 # type: ignore
 from adafruit_motor import servo # type: ignore
 
-from ..config import Constants
+from configs.config import Constants
 from keys import Keys
 
 """

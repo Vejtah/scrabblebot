@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from ..config import Constants
+from configs.config import Constants
 
 def write(data, path):
     with open(path, "w", encoding="utf-8") as f:
