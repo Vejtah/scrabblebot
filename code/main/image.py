@@ -158,7 +158,7 @@ def get_transformed_frame():
 
 def show_grid(grid: dict,
               choose=None,
-              rows=Constants.rows,
+              rows=Constants.rows - 2,  # remove the top 2 lines
               cols=Constants.cols,
               i=True):  # invert around the y
 
