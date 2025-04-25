@@ -1,7 +1,7 @@
 import time
 #from wsgiref.util import request_uri
 import cv2
-from setuptools.unicode_utils import try_encode
+#from setuptools.unicode_utils import try_encode
 #from pipenv.pep508checker import implementation_name
 from tqdm import tqdm
 
@@ -160,6 +160,8 @@ def play(played_moves):
         d.log("transform times if lower than 1: unable to transform any images", t=1)
 
         return
+    choose, grid = [], {}  # set up data so fucking Idea doesn't give me any warnings :D
+
 
     while tried_times != Constants.Image.try_times_to_recognise:
         for _ in range(Constants.Image.transform_img_times):
@@ -168,29 +170,37 @@ def play(played_moves):
             d.add_grid(grid, choose)
 
         err_g, err_ch = d.compare_grids()
+        d.log(f"grid error: {err_g}", f"choose error: {err_ch}")
 
-        letters_amt = 0
-        for letter in choose:  # check if all choose letters are existing
-            if letter is not None:
-                 letters_amt += 1
 
-        can = False
-        if letters_amt == 7:
-            can = True
+        if Constants.Image.check_multiple_times:
+            letters_amt = 0
+            for letter in choose:  # check if all choose letters are existing
+                if letter is not None:
+                     letters_amt += 1
 
-        if err_g == 0 and err_ch == 0 and can:
-            print("resetting grid")
+            can = False
+            if letters_amt == 7:
+                can = True
+
+            if err_g == 0 and err_ch == 0 and can:
+                print("resetting grid")
+                d.reset_grids()
+
+                img.show_grid(grid, choose)
+                break
+
+            else:
+                d.log(f"failed to recognise the grid, i: {tried_times}", t=1)
+                d.reset_grids() # reset the json with grids
+                print("trying again...")
+                tried_times += 1
+        else:
+            # don't check multiple times and just return
             d.reset_grids()
 
             img.show_grid(grid, choose)
             break
-
-        else:
-            d.log(f"failed to recognise the grid, i: {tried_times}", t=1)
-            d.reset_grids() # reset the json with grids
-            print("trying again...")
-            tried_times += 1
-
 
     if tried_times >= Constants.Image.try_times_to_recognise:
         d.log(f"failed to rec the grid {Constants.Image.try_times_to_recognise} times giving up", t=2)

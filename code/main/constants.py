@@ -53,6 +53,7 @@ class Constants:  #
         transform_img_times = 1
         compare_grids_json = r"grid_choose.json"
         try_times_to_recognise = 3
+        check_multiple_times = False
 
     played_moves = []  # list to store all played moves
 
