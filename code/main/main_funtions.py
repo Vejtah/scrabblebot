@@ -179,7 +179,6 @@ def play(played_moves):
         err_g, err_ch = d.compare_grids()
         d.log(f"grid error: {err_g}", f"choose error: {err_ch}")
 
-
         if Constants.Image.check_multiple_times:
             letters_amt = 0
             for letter in choose:  # check if all choose letters are existing
@@ -214,10 +213,12 @@ def play(played_moves):
         print("giving up...")
     # print(grid)
     # print(choose)
-
-    for letter in choose:  # check if all choose letters are existing
-        if letter is None:
-            return 2
+    if not Constants.testing_mode:
+        for letter in choose:  # check if all choose letters are existing
+            if letter is None:
+                return 2
+    else:
+        choose = Constants.Test.choose  # replace choose with preset letters
 
     word = best_word(grid, choose, played_moves)
     print("word")
