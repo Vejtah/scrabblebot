@@ -42,7 +42,7 @@ def get_grid():
     print("->Frame")
     transformed_frame, original_frame = img.get_transformed_frame()
 
-    cv2.imshow("cropped")
+    cv2.imshow("cropped", transformed_frame)
 
     cam_mark.get_hand_mark(original_frame)
 
