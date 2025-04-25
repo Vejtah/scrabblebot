@@ -5,7 +5,7 @@ import time
 # Set up the dictionary for word validation.
 
 from dictonary import UsEn
-from constants import Constants
+from ..config import Constants
 d = UsEn()
 
 def check_word(word: str) -> bool:

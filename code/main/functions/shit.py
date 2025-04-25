@@ -3,7 +3,7 @@ import pytesseract
 import numpy as np
 #from pipenv.pep508checker import implementation_name
 
-from constants import Constants
+from ..config import Constants
 import data
 
 # Optional: Set tesseract executable path

@@ -14,10 +14,10 @@ class Constants:  #
     class System:
         root_dir = "/home/malina/sb/scrabblebot/code/main/"
         keyboardName = "Logitech USB Keyboard"
-        json_path_black_vals = "black_values.json"
+        json_path_black_vals = "functions/json/black_values.json"
         rasp_pi_ports = 10  # amt of ports to search for devices
         camera_index = 0  # find your camera
-        log_path = r".log.txt"
+        log_path = r"logs/.log.txt"
         log_time_format = "%d.%m.%y-%H.%M.%S"
 
     class Image:
@@ -30,10 +30,11 @@ class Constants:  #
         try_times_to_recognise = 3
         check_multiple_times = False
 
-    testing_mode = True  # testing modus
+
 
     class Test:
         choose = ["F", "W", "B", "G", "D", "V", "C"]
+        testing_mode = True  # testing modus
 
     played_moves = []  # list to store all played moves
 

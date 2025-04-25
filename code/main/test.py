@@ -1,22 +1,17 @@
 import time
-#from wsgiref.util import request_uri
-
-from tqdm import tqdm
 
 """ split into Classes"""
 """__init__"""
 
-import shit as sh
-import data as d
-import image as img
+from code.main.functions import shit as sh, alg
 
-import alg
-from movement import Movement
-from constants import Constants
+from code.main.functions.movement import Movement
+
 Mov = Movement()
 s = alg.Scrabble()
 
-import main_funtions as mf
+from code.main.main_functions import main_funtions as mf
+
 #F = Functions()
 
 Mov.release() #  release the motors

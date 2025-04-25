@@ -1,6 +1,6 @@
 import json
 
-from constans import Constants
+from .config import Constants
 
 Cons = Constants()
 json_path = Cons.System.json_path

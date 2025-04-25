@@ -1,11 +1,8 @@
 
-""" split into Classes"""
-"""__init__"""
+from functions.movement import Movement
+from functions.keys import Keys
 
-from movement import Movement
-from keys import Keys
-
-import alg
+from functions import alg
 
 import main_funtions as mf
 

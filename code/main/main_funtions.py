@@ -5,14 +5,9 @@ import cv2
 #from pipenv.pep508checker import implementation_name
 from tqdm import tqdm
 
-import shit as sh
-import data as d
-import image as img
-import cam_mark
-
-import alg
-from movement import Movement
-from constants import Constants
+from functions import alg, cam_mark, data as d, image as img, shit as sh
+from functions.movement import Movement
+from config import Constants
 Mov = Movement()
 s = alg.Scrabble()
 
