@@ -23,5 +23,5 @@ def get_hand_mark(frame):
     #Draw detected markers on the original frame
     cv2.aruco.drawDetectedMarkers(frame, corners, ids)
 
-    cv2.imshow("Camera Feed", frame)
+    cv2.imshow("with markers", frame)
 
