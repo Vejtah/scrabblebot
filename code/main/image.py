@@ -156,7 +156,11 @@ def get_transformed_frame():
         return frame, o_frame # return the cropped frame and original frame
 
 
-def show_grid(grid: dict, choose=None, rows=10, cols=15, i=True):
+def show_grid(grid: dict,
+              choose=None,
+              rows=Constants.rows,
+              cols=Constants.cols,
+              i=True):  # invert around the y
 
     if choose is None:
         choose = []
