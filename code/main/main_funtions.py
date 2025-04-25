@@ -149,7 +149,14 @@ def plot_word(move_tuple: tuple, grid:dict) -> None:
 
     letters_dict = move_tuple[3]
 
+    # invert here???
+
+
+
     for (x, y), letter in letters_dict.items():
+        y = img.invert(y, Constants.rows)
+
+
         grid[(x, y)] = letter.upper()  # add the letter to the main dict
 
 
@@ -216,6 +223,7 @@ def play(played_moves):
     print("word")
     d.log("word:", word)
     print(word)
+
     plot_word(word, grid)
 
     img.show_grid(grid, i=True)
