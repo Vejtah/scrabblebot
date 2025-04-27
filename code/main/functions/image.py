@@ -4,7 +4,26 @@ import cv2
 #from packaging.tags import interpreter_version
 
 
-from configs.config import Constants
+from config import Constants
+
+def get_cam_res(cam_index=0):
+
+    cap = cv2.VideoCapture(cam_index)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 5000)  # set to big size to get the max pos output
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 5000)
+
+    ret, frame = cap.read()
+    if ret:
+        height, width = frame.shape[:2]
+    else:
+        height, width = False, False
+    # Set the desired resolution
+
+
+    #print(f"Camera resolution set to: {int(width)}x{int(height)}")
+    return height, width
+
 
 def invert(x, max_val:int):
     return (max_val - 1) - x
@@ -152,6 +171,8 @@ def get_transformed_frame():
         frame = warp_frame_to_rectangle(o_frame, src_points) # wrap
         
         frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
+        cap.release()
         
         return frame, o_frame # return the cropped frame and original frame
 
@@ -190,3 +211,7 @@ def show_grid(grid: dict,
             line += f" | {pos}"
         print(line)
     print("")
+
+
+def deinit():
+    cv2.destroyAllWindows()

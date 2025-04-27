@@ -2,7 +2,7 @@
 import bisect
 
 
-from configs.config import Constants
+from config import Constants
 Cons = Constants()
 
 save_dir = Cons.System.root_dir + "save.txt"

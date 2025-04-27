@@ -7,18 +7,18 @@ import busio # type: ignore
 from adafruit_pca9685 import PCA9685 # type: ignore
 from adafruit_motor import servo # type: ignore
 
-from configs.config import Constants
+from config import Constants
 from keys import Keys
 
-"""
-crate a object self.Constants to save stepper positions
-"""
 
 Key_c = Keys()
 
 
 class Movement:
     def __init__(self):
+        """
+        crate a object self.Constants to save stepper positions
+        """
 
         self.Cons = Constants()
         

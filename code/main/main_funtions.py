@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from functions import alg, cam_mark, data as d, image as img, shit as sh
 from functions.movement import Movement
-from functions.configs.config import Constants
+from functions.config import Constants
 
 Mov = Movement()
 s = alg.Scrabble()

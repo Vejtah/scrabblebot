@@ -1,6 +1,6 @@
 from evdev import InputDevice, categorize, ecodes
 
-from configs.config import Constants
+from config import Constants
 
 
 class Keys: # class for all controls

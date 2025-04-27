@@ -2,7 +2,7 @@
 from functions.movement import Movement
 from functions.keys import Keys
 
-from functions import alg
+from functions import alg, image as Img
 
 import main_funtions as mf
 
@@ -77,6 +77,7 @@ try:
 finally:
     """end sequence"""
     Mov.release()
+    Img.deinit()
 
 print("quitting")
 
