@@ -27,7 +27,6 @@ class Constants:  #
 
         raspberry_name = "malina"
 
-
         running_on_raspberry = False
         if raspberry_name in root_dir.split("/"):  # detect if running on raspberry or not
             running_on_raspberry = True
