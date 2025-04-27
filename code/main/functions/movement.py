@@ -1,14 +1,22 @@
 import time
-import board # type: ignore
-from adafruit_motor import stepper # type: ignore
-from adafruit_motorkit import MotorKit # type: ignore
 from tqdm import tqdm
-import busio # type: ignore
-from adafruit_pca9685 import PCA9685 # type: ignore
-from adafruit_motor import servo # type: ignore
 
-from config import Constants
-from keys import Keys
+
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
+
+from functions.keys import Keys
+
+if Constants.System.running_on_raspberry:
+    import board # type: ignore
+    from adafruit_motor import stepper # type: ignore
+    from adafruit_motorkit import MotorKit # type: ignore
+    import busio # type: ignore
+    from adafruit_pca9685 import PCA9685 # type: ignore
+    from adafruit_motor import servo # type: ignore
+
 
 
 Key_c = Keys()
@@ -17,22 +25,22 @@ Key_c = Keys()
 class Movement:
     def __init__(self):
         """
-        crate a object self.Constants to save stepper positions
+        crate an object self.Constants to save stepper positions
         """
 
         self.Cons = Constants()
-        
-        self.kit = MotorKit(i2c=board.I2C())
+        if Constants.System.running_on_raspberry:
+            self.kit = MotorKit(i2c=board.I2C())
 
-        self.s_x = self.kit.stepper1
-        self.s_y = self.kit.stepper2
-        self.sleep = .04
+            self.s_x = self.kit.stepper1
+            self.s_y = self.kit.stepper2
+            self.sleep = .04
 
-        self.i2c = busio.I2C(board.SCL, board.SDA)
-        self.pca = PCA9685(self.i2c)
-        self.pca.frequency = 40
+            self.i2c = busio.I2C(board.SCL, board.SDA)
+            self.pca = PCA9685(self.i2c)
+            self.pca.frequency = 40
 
-        self.hand = servo.Servo(self.pca.channels[0])
+            self.hand = servo.Servo(self.pca.channels[0])
 
     def open(self):
         self.hand.angle = 30

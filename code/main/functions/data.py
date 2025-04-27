@@ -1,6 +1,9 @@
 import json
 from datetime import datetime
-from config import Constants
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
 
 def write(data, path):
     with open(path, "w", encoding="utf-8") as f:
@@ -46,16 +49,22 @@ def log(*msg, t=0)->None:
         2: "ERROR"
     }
 
+    longest = 0
+
+    for _, i in types.items():
+        if len(i) > longest:
+            longest = len(i)
+
     now = datetime.now()
     time = now.strftime(Constants.System.log_time_format)
     time_skip = " " * len(time)
-    log_msg = f"{time}|{types[t]}: {str(msg[0])}\n"
+    log_msg = f"{time}|{types[t]:<{longest}}| {str(msg[0])}\n"
 
     for i, m in enumerate(msg):
         if i == 0:
             continue  # skip the first message
         else:
-            log_msg += f"{time_skip}|{types[t]}: {str(m)}\n"
+            log_msg += f"{time_skip}|{types[t]:<{longest}}| {str(m)}\n"
 
 
     with open(Constants.System.log_path, "a") as l:

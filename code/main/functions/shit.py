@@ -1,13 +1,20 @@
 import cv2
 import pytesseract
+
+
 import numpy as np
 #from pipenv.pep508checker import implementation_name
 
-from config import Constants
-import data
+try:
+    from config import Constants
+    import data
+except ModuleNotFoundError:
+    from functions.config import Constants
+
+    from functions import data
 
 # Optional: Set tesseract executable path
-# pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # on linux
 
 def resize(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

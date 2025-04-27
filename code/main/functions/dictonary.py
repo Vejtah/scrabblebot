@@ -2,10 +2,12 @@
 import bisect
 
 
-from config import Constants
-Cons = Constants()
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
 
-save_dir = Cons.System.root_dir + "save.txt"
+save_dir = Constants.System.root_dir + "/save.txt"
 
 
 with open(save_dir, "r") as f:

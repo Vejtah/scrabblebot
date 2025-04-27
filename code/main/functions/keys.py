@@ -1,24 +1,34 @@
+
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
+
 from evdev import InputDevice, categorize, ecodes
 
-from config import Constants
+
+def find_keyboard():
+    device = None
+    for n in range(Constants.System.rasp_pi_ports):
+        try:
+            device = InputDevice(f'/dev/input/event{n}')
+            print(f"Listening on event {n} - {device.path} - {device.name}")
+            if device.name == Constants.System.keyboardName:
+                print(f"Listening on {device.path} - {device.name} : OK")
+                break
+
+        except FileNotFoundError:
+            # print(e)
+            pass
+    if device is not None:
+        return device
+
 
 
 class Keys: # class for all controls
     def __init__(self):
-        for n in range(Constants.System.rasp_pi_ports):
-            try:
-                device = InputDevice(f'/dev/input/event{n}')
-                print(f"Listening on event {n} - {device.path} - {device.name}")
-                if device.name == Constants.System.keyboardName:
 
-                    print(f"Listening on {device.path} - {device.name} : OK")
-                    break
-
-            except FileNotFoundError as _:
-                #print(e)
-                pass
-
-        self.device = device
+        self.device = find_keyboard()
 
     class AllKeys:    
         KEY_PLAY = "KEY_SPACE"
@@ -31,6 +41,7 @@ class Keys: # class for all controls
         KEY_HELP = "KEY_H"
         KEY_NUMPAD = "KEY_N"
         KEY_MANUAL = "KEY_M"
+        KEY_DESTROY_ALL_WINDOWS = "KEY_D"
 
     MANUAL_MOVEMENT = [AllKeys.KEY_MOVE_Xp, AllKeys.KEY_MOVE_Xn, AllKeys.KEY_MOVE_Yp, AllKeys.KEY_MOVE_Yn]
 
@@ -58,7 +69,8 @@ class Keys: # class for all controls
                     key = key_event.keycode
 
                     return key
-    
+
+
     def numpad(self):
         print("entering numpad...")
         num = ""
@@ -76,9 +88,15 @@ class Keys: # class for all controls
 
 
         print("help:")
+        l = 0
+        for attr, _ in self.AllKeys.__dict__.items():  # cycle though all items in AllKeys
+            if not attr.startswith('__'):
+                if len(attr) > l:
+                    l = len(attr)
+
         for attr, value in self.AllKeys.__dict__.items():  # cycle though all items in AllKeys
             if not attr.startswith('__'):
-                print(f"{attr} = {value}")
+                print(f"{attr:>{l}} = {value}")
         print("")
 
 

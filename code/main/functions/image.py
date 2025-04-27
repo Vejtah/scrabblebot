@@ -4,7 +4,11 @@ import cv2
 #from packaging.tags import interpreter_version
 
 
-from config import Constants
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
+
 
 def get_cam_res(cam_index=0):
 
@@ -141,14 +145,19 @@ def get_transformed_frame():
     I have spent 2 hours finding this shit out, so you are welcome :D
     -Vejtah
     """
+    # Change index if using a USB camera (/dev/video1, etc.)
 
-    cameraIndex = Constants.System.camera_index
+
+    camera_index = Constants.System.camera_index
+    h, w = get_cam_res(cam_index=camera_index)
+
+    cap = cv2.VideoCapture(camera_index)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+
 
     while True:
-        print("capturing frame...")
-        
-        cap = cv2.VideoCapture(cameraIndex)  # Change index if using a USB camera (/dev/video1, etc.)
-
 
         print("checking if cam is opened...")
         if not cap.isOpened():
@@ -156,7 +165,9 @@ def get_transformed_frame():
             raise SystemError("Error: Cannot access the camera")
         else:
             print("cam OK")
-        
+        print("capturing frame...")
+
+
         ret, o_frame = cap.read()
         #cv2.imshow(str(random.randint(0, 100)), frame)
         if not ret:

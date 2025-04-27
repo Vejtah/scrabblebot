@@ -12,7 +12,7 @@ from functions.config import Constants
 Mov = Movement()
 s = alg.Scrabble()
 
-def shit(frame, bw=None) -> str | None:
+def shit(frame, i:int, bw=None) -> str | None:
 
     """
     Shit stands for:
@@ -26,7 +26,11 @@ def shit(frame, bw=None) -> str | None:
     black_prc = sh.get_black_pixel_percentage(resized, bw=bw)
 
     if sh.is_letter(black_prc):
-        # cv2.imshow("letter", frame)
+
+        if Constants.Test.testing_mode:
+            cv2.imshow(f"letter {i}", frame)
+            cv2.waitKey(Constants.Image.imshow_loadtime)
+
         letter = sh.extract_letter(resized)
         # print(letter)
         d.add_black_letter_val(black_prc)
@@ -38,9 +42,17 @@ def get_grid():
     print("->Frame")
     transformed_frame, original_frame = img.get_transformed_frame()
 
-    cv2.imshow("cropped", transformed_frame)
+    if Constants.Test.testing_mode:
+        cv2.imshow("cropped", transformed_frame)
+        cv2.waitKey(Constants.Image.imshow_loadtime)
 
-    cam_mark.get_hand_mark(original_frame)
+    aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+    parameters = cv2.aruco.DetectorParameters()
+
+    # Create the ArUco detector
+    detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
+
+    cam_mark.get_hand_mark(original_frame, detector)
 
     # cv2.imshow("trans", transformed_frame)
     print("splitting frame...")
@@ -81,9 +93,11 @@ def get_grid():
     print(f"->mid point: {round(mid, ndigits=2)}")
     print(f"->percent of black in the whole frame: {round(prc_of_black_view, ndigits=2)}")
     print("")
+    i = 0
     for frame in tqdm(frames, desc="img to str"):  # use tqdm to crate a loading bar
 
-        letters.append(shit(frame, bw=bw))  # use network
+        letters.append(shit(frame, i, bw=bw))  # use network
+        i += 1
     print("")
     print("transforming into a dict")
 
@@ -103,7 +117,7 @@ def best_word(grid, choose, played_moves):
         _ = best_move[0]  # try to get the word
     except TypeError:
         print("caught")
-        return 0  # code catch
+        return 1  # code catch
 
     return best_move
 
@@ -209,25 +223,24 @@ def play(played_moves):
         print("giving up...")
     # print(grid)
     # print(choose)
-    if not Constants.testing_mode:
+    if not Constants.Test.testing_mode:
         for letter in choose:  # check if all choose letters are existing
             if letter is None:
                 return 2
     else:
-        choose = Constants.Test.choose  # replace choose with preset letters
+        if len(Constants.Test.choose) > 0:
+            choose = Constants.Test.choose  # replace choose with preset letters
 
     word = best_word(grid, choose, played_moves)
     print("word")
     d.log("word:", word)
     print(word)
 
-    plot_word(word, grid)
-
-    img.show_grid(grid)
-    #img.show_grid(grid, i=False)
-
     if word == 1:
         return 1
+
+    plot_word(word, grid)
+    img.show_grid(grid)
 
     played_moves.append(word[0])  # add word to played moves
     #build_word(word, choose)

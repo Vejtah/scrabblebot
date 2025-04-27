@@ -1,14 +1,19 @@
-from string import capwords
+import os
+print(os.getcwd())
 
 import cv2
 
 from cam_mark import get_hand_mark
-from config import Constants
+
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
+
 import image as Img
 
 h, w = Img.get_cam_res(cam_index=2)
 
-Constants.System.camera_index = 2  # get on pc
 cameraIndex = Constants.System.camera_index
 cap = cv2.VideoCapture(cameraIndex)
 
@@ -18,23 +23,21 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
 
 ret, frame = cap.read()
 if ret:
-    height, width = frame.shape[:2]
-    print(f"Resolution set to: {width}x{height}")
+    pass
 else:
     print("Failed to capture frame.")
 
 # Set the desired resolution
 
 # Verify if the settings were applied
-width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-print(f"Camera resolution set to: {int(width)}x{int(height)}")
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 parameters = cv2.aruco.DetectorParameters()
 
 # Create the ArUco detector
 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
+
+pos = [(189, 206), (943, 178), (965, 803), (207, 829)]
 
 while True:
 

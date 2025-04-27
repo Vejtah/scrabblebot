@@ -1,0 +1,8 @@
+27.04.25-19.50.07|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+27.04.25-19.50.07|INFO   | word:
+                 |INFO   | ('web', (0, 1), (6, 5), {(6, 5): 'w', (6, 7): 'b'})
+27.04.25-19.50.58|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+27.04.25-19.50.58|INFO   | word:
+                 |INFO   | ('cad', (0, 1), (7, 6), {(7, 6): 'c', (7, 8): 'd'})

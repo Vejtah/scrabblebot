@@ -1,3 +1,5 @@
+import os
+
 def white_space_start():
     j = 101010101010100000000000000000  # first 2 lines
     j = [int(i) for i in str(j)]  # turn int to list
@@ -11,24 +13,53 @@ class Constants:  #
     def __init__(self):
         pass
 
+
     class System:
-        root_dir = "/home/malina/sb/scrabblebot/code/main/"
-        keyboardName = "Logitech USB Keyboard"
-        json_path_black_vals = "json/black_values.json"
-        rasp_pi_ports = 10  # amt of ports to search for devices
-        camera_index = 0  # find your camera
-        log_path = r"../logs/.log.txt"
+        current_file = os.path.abspath(__file__)
+        current_folder = os.path.dirname(current_file)
+        root_dir = os.path.dirname(current_folder)
+        print(f"root: {root_dir}")
+
+        json_path_black_vals =r"functions/json/black_values.json"
+        rasp_pi_ports = 10  # amt of ports to se arch for devices
+        log_path = r"logs/.log.txt"
         log_time_format = "%d.%m.%y-%H.%M.%S"
+
+        raspberry_name = "malina"
+
+
+        running_on_raspberry = False
+        if raspberry_name in root_dir.split("/"):  # detect if running on raspberry or not
+            running_on_raspberry = True
+            print(f"running on pi")
+        else:
+            print(f"running on PC")
+
+        if running_on_raspberry:
+            camera_index = 0  # find your camera
+            keyboardName = "Logitech USB Keyboard"  # you can set different keyboards on pc and pi
+        else:
+            camera_index = 2
+            keyboardName = "Logitech USB Receiver"
+
+        print(f"cam index: {camera_index}")
+
 
     class Image:
         available_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         add_black_prc = 0  # use if the letter recognition isn't working properly
-        extractAllPoints = [(64, 87), (493, 68), (508, 426), (76, 443)]
+        """
+        extract all points depends on your camera resolution
+        """
+        #extractAllPoints = [(64, 87), (493, 68), (508, 426), (76, 443)] for default cv2 cam res -> bad cam quality
+        extractAllPoints = [(189, 206), (943, 178), (965, 803), (207, 829)]
+
         use_adaptive_lightning = False
-        transform_img_times = 1
-        compare_grids_json = r"grid_choose.json"
+        transform_img_times = 2
+        compare_grids_json = r"functions/json/grid_choose.json"
         try_times_to_recognise = 3
-        check_multiple_times = False
+        check_multiple_times = True
+        imshow_loadtime = 1  # ms
 
 
 

@@ -4,8 +4,11 @@ import time
 
 # Set up the dictionary for word validation.
 
-from dictonary import UsEn
-from config import Constants
+from functions.dictonary import UsEn
+try:
+    from config import Constants
+except ModuleNotFoundError:
+    from functions.config import Constants
 d = UsEn()
 
 def check_word(word: str) -> bool:

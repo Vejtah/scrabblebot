@@ -1,18 +1,20 @@
 
 from functions.movement import Movement
 from functions.keys import Keys
-
+from functions.config import Constants
 from functions import alg, image as Img
 
 import main_funtions as mf
 
-Mov = Movement()  # movement from Movement
 keys = Keys()
 s = alg.Scrabble()
 
 played_moves = []
+if Constants.System.running_on_raspberry:
+    Mov = Movement()  # movement from Movement
 
-Mov.release() #  release the motors
+    Mov.release() #  release the motors
+    Mov.open()  # open the hand in the start
 """play def"""
 
 
@@ -22,8 +24,7 @@ print("entering main loop...")
 
 print("opening hand...")
 
-Mov.open() # open the hand in the start
-    
+
 #  use try to use finally to release motors
 try:
     key = ""           
@@ -57,9 +58,12 @@ try:
 
         elif key == keys.AllKeys.KEY_MANUAL:
             print("entering manual movement...")
-            Mov.manual()
-            Mov.release()
+            if Constants.System.running_on_raspberry:
+                Mov.manual()
+                Mov.release()
 
+        elif key == keys.AllKeys.KEY_DESTROY_ALL_WINDOWS:
+            Img.deinit()
 
         elif key == keys.AllKeys.KEY_QUIT: # confirm to quit 
             print(f"confirm to quit ({keys.AllKeys.KEY_CONFIRM})")
@@ -76,7 +80,9 @@ try:
     
 finally:
     """end sequence"""
-    Mov.release()
+    if Constants.System.running_on_raspberry:
+        Mov.release()
+
     Img.deinit()
 
 print("quitting")
