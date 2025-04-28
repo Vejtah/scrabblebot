@@ -186,8 +186,8 @@ def play(played_moves):
             grid, choose = get_grid()
             d.add_grid(grid, choose)
 
-        err_g, err_ch = d.compare_grids()
-        d.log(f"grid error: {err_g}", f"choose error: {err_ch}")
+        err_g, choose = d.compare_grids()
+        d.log(f"grid error: {err_g}", f"fixed choose: {choose}")
 
         if Constants.Image.check_multiple_times:
             letters_amt = 0
@@ -199,7 +199,7 @@ def play(played_moves):
             if letters_amt == 7:
                 can = True
 
-            if err_g == 0 and err_ch == 0 and can:
+            if err_g == 0 and can:
                 print("resetting grid")
                 d.reset_grids()
 
@@ -223,12 +223,15 @@ def play(played_moves):
         print("giving up...")
     # print(grid)
     # print(choose)
+
+    img.show_grid(grid, choose)
+
     if not Constants.Test.testing_mode:
         for letter in choose:  # check if all choose letters are existing
             if letter is None:
                 return 2
     else:
-        if len(Constants.Test.choose) > 0:
+        if len(Constants.Test.choose)  ==  7:
             choose = Constants.Test.choose  # replace choose with preset letters
 
     word = best_word(grid, choose, played_moves)

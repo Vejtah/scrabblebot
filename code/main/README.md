@@ -12,8 +12,8 @@ You can change:
 - the keys in `keys.py`
 ## You should
 Define your keyboard name in `constans.py` under **`keyboardName`**
-> else the program wont be able to find it
-   - in case you dont know the name, you can use my `scanPorts.py` in [scanPorts][1]
+> else the program won't be able to find it
+   - in case you don't know the name, you can use my `scanPorts.py` in [scanPorts][1]
 
 
 

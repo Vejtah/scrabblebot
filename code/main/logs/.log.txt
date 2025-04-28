@@ -6,3 +6,103 @@
                  |INFO   | choose error: 0
 27.04.25-19.50.58|INFO   | word:
                  |INFO   | ('cad', (0, 1), (7, 6), {(7, 6): 'c', (7, 8): 'd'})
+27.04.25-22.03.16|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+27.04.25-22.03.16|INFO   | word:
+                 |INFO   | ('web', (0, 1), (6, 5), {(6, 5): 'w', (6, 7): 'b'})
+28.04.25-10.49.12|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+28.04.25-10.49.12|WARNING| failed to recognise the grid, i: 0
+28.04.25-10.49.18|WARNING| letter: C, None
+28.04.25-10.49.18|WARNING| letter: None, C
+28.04.25-10.49.18|INFO   | grid error: 0
+                 |INFO   | choose error: 2
+28.04.25-10.49.18|WARNING| failed to recognise the grid, i: 1
+28.04.25-10.49.24|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+28.04.25-10.49.24|INFO   | word:
+                 |INFO   | ('web', (0, 1), (6, 5), {(6, 5): 'w', (6, 7): 'b'})
+28.04.25-10.52.20|INFO   | grid error: 0
+                 |INFO   | choose error: 0
+28.04.25-10.52.20|WARNING| failed to recognise the grid, i: 0
+28.04.25-10.52.26|WARNING| letter: F, None
+28.04.25-10.52.26|WARNING| letter: None, O
+28.04.25-10.52.26|WARNING| letter: None, F
+28.04.25-10.52.26|WARNING| letter: O, None
+28.04.25-10.52.26|INFO   | grid error: 0
+                 |INFO   | choose error: 4
+28.04.25-10.52.26|WARNING| failed to recognise the grid, i: 1
+28.04.25-10.52.32|WARNING| letter: None, O
+28.04.25-10.52.32|WARNING| letter: O, None
+28.04.25-10.52.32|INFO   | grid error: 0
+                 |INFO   | choose error: 2
+28.04.25-10.52.32|WARNING| failed to recognise the grid, i: 2
+28.04.25-10.52.32|ERROR  | failed to rec the grid 3 times giving up
+28.04.25-10.52.32|INFO   | word:
+                 |INFO   | ('cad', (0, 1), (7, 6), {(7, 6): 'c', (7, 8): 'd'})
+28.04.25-11.14.26|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', 'C']
+28.04.25-11.14.26|INFO   | word:
+                 |INFO   | ('web', (0, 1), (6, 5), {(6, 5): 'w', (6, 7): 'b'})
+28.04.25-11.15.14|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', 'C']
+28.04.25-11.15.14|INFO   | word:
+                 |INFO   | ('cad', (0, 1), (7, 6), {(7, 6): 'c', (7, 8): 'd'})
+28.04.25-11.16.15|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', 'C']
+28.04.25-11.16.15|INFO   | word:
+                 |INFO   | 1
+28.04.25-11.16.44|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.16.44|WARNING| failed to recognise the grid, i: 0
+28.04.25-11.16.50|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.16.50|WARNING| failed to recognise the grid, i: 1
+28.04.25-11.16.56|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.16.56|WARNING| failed to recognise the grid, i: 2
+28.04.25-11.16.56|ERROR  | failed to rec the grid 3 times giving up
+28.04.25-11.18.36|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.18.36|WARNING| failed to recognise the grid, i: 0
+28.04.25-11.18.42|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.18.42|WARNING| failed to recognise the grid, i: 1
+28.04.25-11.18.48|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.18.48|WARNING| failed to recognise the grid, i: 2
+28.04.25-11.18.48|ERROR  | failed to rec the grid 3 times giving up
+28.04.25-11.21.17|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.21.17|WARNING| failed to recognise the grid, i: 0
+28.04.25-11.21.23|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.21.23|WARNING| failed to recognise the grid, i: 1
+28.04.25-11.21.29|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.21.29|WARNING| failed to recognise the grid, i: 2
+28.04.25-11.21.29|ERROR  | failed to rec the grid 3 times giving up
+28.04.25-11.22.44|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', None, None]
+28.04.25-11.22.44|WARNING| failed to recognise the grid, i: 0
+28.04.25-11.22.50|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.22.50|WARNING| failed to recognise the grid, i: 1
+28.04.25-11.22.56|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'D', 'O', None]
+28.04.25-11.22.56|WARNING| failed to recognise the grid, i: 2
+28.04.25-11.22.56|ERROR  | failed to rec the grid 3 times giving up
+28.04.25-11.23.22|INFO   | grid error: 0
+                 |INFO   | fixed choose: ['W', 'F', 'B', 'G', 'C', 'O', 'D']
+28.04.25-11.23.22|INFO   | word:
+                 |INFO   | ('web', (0, 1), (6, 5), {(6, 5): 'w', (6, 7): 'b'})
+28.04.25-17.23.32|WARNING| k: (13, 0), grids 0, 1: None, J
+28.04.25-17.23.32|WARNING| k: (14, 0), grids 0, 1: None, W
+28.04.25-17.23.32|WARNING| k: (13, 0), grids 1, 0: J, None
+28.04.25-17.23.32|WARNING| k: (14, 0), grids 1, 0: W, None
+28.04.25-17.23.32|INFO   | grid error: 4
+                 |INFO   | fixed choose: [None, 'F', None, None, None, None, None]
+28.04.25-17.23.32|WARNING| failed to recognise the grid, i: 0
+28.04.25-17.23.40|INFO   | grid error: 0
+                 |INFO   | fixed choose: [None, 'F', None, None, None, None, None]
+28.04.25-17.23.40|WARNING| failed to recognise the grid, i: 1

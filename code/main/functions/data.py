@@ -5,14 +5,18 @@ try:
 except ModuleNotFoundError:
     from functions.config import Constants
 
+
 def write(data, path):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
 
 def load(path):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     return data
+
+
 def reset_grids():
     write(  # reset
         {
@@ -32,11 +36,13 @@ def add_grid(grid, choose):
     data["choose"].append(choose)
     write(data, Constants.Image.compare_grids_json)
 
+
 def add_black_letter_val(val:float)->None:
     data = load(Constants.System.json_path_black_vals)
     data["letters"].append(val)
     
     write(data, Constants.System.json_path_black_vals)
+
 
 def log(*msg, t=0)->None:
 
@@ -73,7 +79,9 @@ def log(*msg, t=0)->None:
         )
     l.close()
 
+
 def clac_midpoint(data):
+
     """
     find the highest black val for the frames with letters and the lowest for the frames without tiles
     than find a midpoint which will be used to determine if there is a letters or not later on (using the network)
@@ -106,8 +114,7 @@ def compare_grids() -> {int, int}:
                     log(f"k: {key}, grids {i}, {n}: {grids[i][key]}, {grids[n][key]}", t=1)
                     error_d += 1
 
-    error_ch = 0
-
+    """
     for i, choose in enumerate(chooses):
         for x in chooses:
             for n, letter in enumerate(choose):
@@ -116,10 +123,23 @@ def compare_grids() -> {int, int}:
                 else:
                     error_ch += 1
                     log(f"letter: {letter}, {x[n]}", t=1)
+    """
+    ret_choose = []
 
+    for choose in chooses:
+        print(choose)
 
-    return error_d, error_ch
+    for index, letter in enumerate(
+            chooses[0]):  # cycle through the first list of choose letter and add missing from seconds
+        if letter is None:
+            for attempt, n_choose in enumerate(chooses):
+                if n_choose[index] is not None:
+                    ret_choose.append(n_choose[index])
+                    continue
 
-if __name__ == "__main__":
+                elif attempt + 1 == len(chooses):  # detect if the all letters were tried
+                    ret_choose.append(None)
+        else:
+            ret_choose.append(letter)
 
-    log("test", "test", t=0)
+    return error_d, ret_choose

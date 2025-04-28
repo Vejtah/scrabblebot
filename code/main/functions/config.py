@@ -63,8 +63,11 @@ class Constants:  #
 
 
     class Test:
-        choose = ["F", "W", "B", "G", "D", "V", "C"]
+        #choose = ["F", "W", "B", "G", "D", "V", "C"]
+        choose = []
+
         testing_mode = True  # testing modus
+        instant_start = testing_mode
 
     played_moves = []  # list to store all played moves
 
